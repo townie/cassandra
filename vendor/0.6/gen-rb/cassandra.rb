@@ -8,8 +8,8 @@ require 'thrift'
 require 'cassandra_types'
 require 'cassandra_constants'
 
-    module CassandraThrift
-      module Cassandra
+    module CCassandraThrift
+      module CCassandra
         class Client
           include ::Thrift::Client
 
@@ -355,9 +355,9 @@ require 'cassandra_constants'
             result = Login_result.new()
             begin
               @handler.login(args.keyspace, args.auth_request)
-            rescue CassandraThrift::AuthenticationException => authnx
+            rescue CCassandraThrift::AuthenticationException => authnx
               result.authnx = authnx
-            rescue CassandraThrift::AuthorizationException => authzx
+            rescue CCassandraThrift::AuthorizationException => authzx
               result.authzx = authzx
             end
             write_result(result, oprot, 'login', seqid)
@@ -368,13 +368,13 @@ require 'cassandra_constants'
             result = Get_result.new()
             begin
               result.success = @handler.get(args.keyspace, args.key, args.column_path, args.consistency_level)
-            rescue CassandraThrift::InvalidRequestException => ire
+            rescue CCassandraThrift::InvalidRequestException => ire
               result.ire = ire
-            rescue CassandraThrift::NotFoundException => nfe
+            rescue CCassandraThrift::NotFoundException => nfe
               result.nfe = nfe
-            rescue CassandraThrift::UnavailableException => ue
+            rescue CCassandraThrift::UnavailableException => ue
               result.ue = ue
-            rescue CassandraThrift::TimedOutException => te
+            rescue CCassandraThrift::TimedOutException => te
               result.te = te
             end
             write_result(result, oprot, 'get', seqid)
@@ -385,11 +385,11 @@ require 'cassandra_constants'
             result = Get_slice_result.new()
             begin
               result.success = @handler.get_slice(args.keyspace, args.key, args.column_parent, args.predicate, args.consistency_level)
-            rescue CassandraThrift::InvalidRequestException => ire
+            rescue CCassandraThrift::InvalidRequestException => ire
               result.ire = ire
-            rescue CassandraThrift::UnavailableException => ue
+            rescue CCassandraThrift::UnavailableException => ue
               result.ue = ue
-            rescue CassandraThrift::TimedOutException => te
+            rescue CCassandraThrift::TimedOutException => te
               result.te = te
             end
             write_result(result, oprot, 'get_slice', seqid)
@@ -400,11 +400,11 @@ require 'cassandra_constants'
             result = Multiget_result.new()
             begin
               result.success = @handler.multiget(args.keyspace, args.keys, args.column_path, args.consistency_level)
-            rescue CassandraThrift::InvalidRequestException => ire
+            rescue CCassandraThrift::InvalidRequestException => ire
               result.ire = ire
-            rescue CassandraThrift::UnavailableException => ue
+            rescue CCassandraThrift::UnavailableException => ue
               result.ue = ue
-            rescue CassandraThrift::TimedOutException => te
+            rescue CCassandraThrift::TimedOutException => te
               result.te = te
             end
             write_result(result, oprot, 'multiget', seqid)
@@ -415,11 +415,11 @@ require 'cassandra_constants'
             result = Multiget_slice_result.new()
             begin
               result.success = @handler.multiget_slice(args.keyspace, args.keys, args.column_parent, args.predicate, args.consistency_level)
-            rescue CassandraThrift::InvalidRequestException => ire
+            rescue CCassandraThrift::InvalidRequestException => ire
               result.ire = ire
-            rescue CassandraThrift::UnavailableException => ue
+            rescue CCassandraThrift::UnavailableException => ue
               result.ue = ue
-            rescue CassandraThrift::TimedOutException => te
+            rescue CCassandraThrift::TimedOutException => te
               result.te = te
             end
             write_result(result, oprot, 'multiget_slice', seqid)
@@ -430,11 +430,11 @@ require 'cassandra_constants'
             result = Get_count_result.new()
             begin
               result.success = @handler.get_count(args.keyspace, args.key, args.column_parent, args.consistency_level)
-            rescue CassandraThrift::InvalidRequestException => ire
+            rescue CCassandraThrift::InvalidRequestException => ire
               result.ire = ire
-            rescue CassandraThrift::UnavailableException => ue
+            rescue CCassandraThrift::UnavailableException => ue
               result.ue = ue
-            rescue CassandraThrift::TimedOutException => te
+            rescue CCassandraThrift::TimedOutException => te
               result.te = te
             end
             write_result(result, oprot, 'get_count', seqid)
@@ -445,11 +445,11 @@ require 'cassandra_constants'
             result = Get_range_slice_result.new()
             begin
               result.success = @handler.get_range_slice(args.keyspace, args.column_parent, args.predicate, args.start_key, args.finish_key, args.row_count, args.consistency_level)
-            rescue CassandraThrift::InvalidRequestException => ire
+            rescue CCassandraThrift::InvalidRequestException => ire
               result.ire = ire
-            rescue CassandraThrift::UnavailableException => ue
+            rescue CCassandraThrift::UnavailableException => ue
               result.ue = ue
-            rescue CassandraThrift::TimedOutException => te
+            rescue CCassandraThrift::TimedOutException => te
               result.te = te
             end
             write_result(result, oprot, 'get_range_slice', seqid)
@@ -460,11 +460,11 @@ require 'cassandra_constants'
             result = Get_range_slices_result.new()
             begin
               result.success = @handler.get_range_slices(args.keyspace, args.column_parent, args.predicate, args.range, args.consistency_level)
-            rescue CassandraThrift::InvalidRequestException => ire
+            rescue CCassandraThrift::InvalidRequestException => ire
               result.ire = ire
-            rescue CassandraThrift::UnavailableException => ue
+            rescue CCassandraThrift::UnavailableException => ue
               result.ue = ue
-            rescue CassandraThrift::TimedOutException => te
+            rescue CCassandraThrift::TimedOutException => te
               result.te = te
             end
             write_result(result, oprot, 'get_range_slices', seqid)
@@ -475,11 +475,11 @@ require 'cassandra_constants'
             result = Insert_result.new()
             begin
               @handler.insert(args.keyspace, args.key, args.column_path, args.value, args.timestamp, args.consistency_level)
-            rescue CassandraThrift::InvalidRequestException => ire
+            rescue CCassandraThrift::InvalidRequestException => ire
               result.ire = ire
-            rescue CassandraThrift::UnavailableException => ue
+            rescue CCassandraThrift::UnavailableException => ue
               result.ue = ue
-            rescue CassandraThrift::TimedOutException => te
+            rescue CCassandraThrift::TimedOutException => te
               result.te = te
             end
             write_result(result, oprot, 'insert', seqid)
@@ -490,11 +490,11 @@ require 'cassandra_constants'
             result = Batch_insert_result.new()
             begin
               @handler.batch_insert(args.keyspace, args.key, args.cfmap, args.consistency_level)
-            rescue CassandraThrift::InvalidRequestException => ire
+            rescue CCassandraThrift::InvalidRequestException => ire
               result.ire = ire
-            rescue CassandraThrift::UnavailableException => ue
+            rescue CCassandraThrift::UnavailableException => ue
               result.ue = ue
-            rescue CassandraThrift::TimedOutException => te
+            rescue CCassandraThrift::TimedOutException => te
               result.te = te
             end
             write_result(result, oprot, 'batch_insert', seqid)
@@ -505,11 +505,11 @@ require 'cassandra_constants'
             result = Remove_result.new()
             begin
               @handler.remove(args.keyspace, args.key, args.column_path, args.timestamp, args.consistency_level)
-            rescue CassandraThrift::InvalidRequestException => ire
+            rescue CCassandraThrift::InvalidRequestException => ire
               result.ire = ire
-            rescue CassandraThrift::UnavailableException => ue
+            rescue CCassandraThrift::UnavailableException => ue
               result.ue = ue
-            rescue CassandraThrift::TimedOutException => te
+            rescue CCassandraThrift::TimedOutException => te
               result.te = te
             end
             write_result(result, oprot, 'remove', seqid)
@@ -520,11 +520,11 @@ require 'cassandra_constants'
             result = Batch_mutate_result.new()
             begin
               @handler.batch_mutate(args.keyspace, args.mutation_map, args.consistency_level)
-            rescue CassandraThrift::InvalidRequestException => ire
+            rescue CCassandraThrift::InvalidRequestException => ire
               result.ire = ire
-            rescue CassandraThrift::UnavailableException => ue
+            rescue CCassandraThrift::UnavailableException => ue
               result.ue = ue
-            rescue CassandraThrift::TimedOutException => te
+            rescue CCassandraThrift::TimedOutException => te
               result.te = te
             end
             write_result(result, oprot, 'batch_mutate', seqid)
@@ -577,7 +577,7 @@ require 'cassandra_constants'
             result = Describe_keyspace_result.new()
             begin
               result.success = @handler.describe_keyspace(args.keyspace)
-            rescue CassandraThrift::NotFoundException => nfe
+            rescue CCassandraThrift::NotFoundException => nfe
               result.nfe = nfe
             end
             write_result(result, oprot, 'describe_keyspace', seqid)
@@ -601,7 +601,7 @@ require 'cassandra_constants'
 
           FIELDS = {
             KEYSPACE => {:type => ::Thrift::Types::STRING, :name => 'keyspace'},
-            AUTH_REQUEST => {:type => ::Thrift::Types::STRUCT, :name => 'auth_request', :class => CassandraThrift::AuthenticationRequest}
+            AUTH_REQUEST => {:type => ::Thrift::Types::STRUCT, :name => 'auth_request', :class => CCassandraThrift::AuthenticationRequest}
           }
 
           def struct_fields; FIELDS; end
@@ -620,8 +620,8 @@ require 'cassandra_constants'
           AUTHZX = 2
 
           FIELDS = {
-            AUTHNX => {:type => ::Thrift::Types::STRUCT, :name => 'authnx', :class => CassandraThrift::AuthenticationException},
-            AUTHZX => {:type => ::Thrift::Types::STRUCT, :name => 'authzx', :class => CassandraThrift::AuthorizationException}
+            AUTHNX => {:type => ::Thrift::Types::STRUCT, :name => 'authnx', :class => CCassandraThrift::AuthenticationException},
+            AUTHZX => {:type => ::Thrift::Types::STRUCT, :name => 'authzx', :class => CCassandraThrift::AuthorizationException}
           }
 
           def struct_fields; FIELDS; end
@@ -642,8 +642,8 @@ require 'cassandra_constants'
           FIELDS = {
             KEYSPACE => {:type => ::Thrift::Types::STRING, :name => 'keyspace'},
             KEY => {:type => ::Thrift::Types::STRING, :name => 'key'},
-            COLUMN_PATH => {:type => ::Thrift::Types::STRUCT, :name => 'column_path', :class => CassandraThrift::ColumnPath},
-            CONSISTENCY_LEVEL => {:type => ::Thrift::Types::I32, :name => 'consistency_level', :default =>             1, :enum_class => CassandraThrift::ConsistencyLevel}
+            COLUMN_PATH => {:type => ::Thrift::Types::STRUCT, :name => 'column_path', :class => CCassandraThrift::ColumnPath},
+            CONSISTENCY_LEVEL => {:type => ::Thrift::Types::I32, :name => 'consistency_level', :default =>             1, :enum_class => CCassandraThrift::ConsistencyLevel}
           }
 
           def struct_fields; FIELDS; end
@@ -653,7 +653,7 @@ require 'cassandra_constants'
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field key is unset!') unless @key
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field column_path is unset!') unless @column_path
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field consistency_level is unset!') unless @consistency_level
-            unless @consistency_level.nil? || CassandraThrift::ConsistencyLevel::VALID_VALUES.include?(@consistency_level)
+            unless @consistency_level.nil? || CCassandraThrift::ConsistencyLevel::VALID_VALUES.include?(@consistency_level)
               raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field consistency_level!')
             end
           end
@@ -670,11 +670,11 @@ require 'cassandra_constants'
           TE = 4
 
           FIELDS = {
-            SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => CassandraThrift::ColumnOrSuperColumn},
-            IRE => {:type => ::Thrift::Types::STRUCT, :name => 'ire', :class => CassandraThrift::InvalidRequestException},
-            NFE => {:type => ::Thrift::Types::STRUCT, :name => 'nfe', :class => CassandraThrift::NotFoundException},
-            UE => {:type => ::Thrift::Types::STRUCT, :name => 'ue', :class => CassandraThrift::UnavailableException},
-            TE => {:type => ::Thrift::Types::STRUCT, :name => 'te', :class => CassandraThrift::TimedOutException}
+            SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => CCassandraThrift::ColumnOrSuperColumn},
+            IRE => {:type => ::Thrift::Types::STRUCT, :name => 'ire', :class => CCassandraThrift::InvalidRequestException},
+            NFE => {:type => ::Thrift::Types::STRUCT, :name => 'nfe', :class => CCassandraThrift::NotFoundException},
+            UE => {:type => ::Thrift::Types::STRUCT, :name => 'ue', :class => CCassandraThrift::UnavailableException},
+            TE => {:type => ::Thrift::Types::STRUCT, :name => 'te', :class => CCassandraThrift::TimedOutException}
           }
 
           def struct_fields; FIELDS; end
@@ -696,9 +696,9 @@ require 'cassandra_constants'
           FIELDS = {
             KEYSPACE => {:type => ::Thrift::Types::STRING, :name => 'keyspace'},
             KEY => {:type => ::Thrift::Types::STRING, :name => 'key'},
-            COLUMN_PARENT => {:type => ::Thrift::Types::STRUCT, :name => 'column_parent', :class => CassandraThrift::ColumnParent},
-            PREDICATE => {:type => ::Thrift::Types::STRUCT, :name => 'predicate', :class => CassandraThrift::SlicePredicate},
-            CONSISTENCY_LEVEL => {:type => ::Thrift::Types::I32, :name => 'consistency_level', :default =>             1, :enum_class => CassandraThrift::ConsistencyLevel}
+            COLUMN_PARENT => {:type => ::Thrift::Types::STRUCT, :name => 'column_parent', :class => CCassandraThrift::ColumnParent},
+            PREDICATE => {:type => ::Thrift::Types::STRUCT, :name => 'predicate', :class => CCassandraThrift::SlicePredicate},
+            CONSISTENCY_LEVEL => {:type => ::Thrift::Types::I32, :name => 'consistency_level', :default =>             1, :enum_class => CCassandraThrift::ConsistencyLevel}
           }
 
           def struct_fields; FIELDS; end
@@ -709,7 +709,7 @@ require 'cassandra_constants'
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field column_parent is unset!') unless @column_parent
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field predicate is unset!') unless @predicate
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field consistency_level is unset!') unless @consistency_level
-            unless @consistency_level.nil? || CassandraThrift::ConsistencyLevel::VALID_VALUES.include?(@consistency_level)
+            unless @consistency_level.nil? || CCassandraThrift::ConsistencyLevel::VALID_VALUES.include?(@consistency_level)
               raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field consistency_level!')
             end
           end
@@ -725,10 +725,10 @@ require 'cassandra_constants'
           TE = 3
 
           FIELDS = {
-            SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => CassandraThrift::ColumnOrSuperColumn}},
-            IRE => {:type => ::Thrift::Types::STRUCT, :name => 'ire', :class => CassandraThrift::InvalidRequestException},
-            UE => {:type => ::Thrift::Types::STRUCT, :name => 'ue', :class => CassandraThrift::UnavailableException},
-            TE => {:type => ::Thrift::Types::STRUCT, :name => 'te', :class => CassandraThrift::TimedOutException}
+            SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => CCassandraThrift::ColumnOrSuperColumn}},
+            IRE => {:type => ::Thrift::Types::STRUCT, :name => 'ire', :class => CCassandraThrift::InvalidRequestException},
+            UE => {:type => ::Thrift::Types::STRUCT, :name => 'ue', :class => CCassandraThrift::UnavailableException},
+            TE => {:type => ::Thrift::Types::STRUCT, :name => 'te', :class => CCassandraThrift::TimedOutException}
           }
 
           def struct_fields; FIELDS; end
@@ -749,8 +749,8 @@ require 'cassandra_constants'
           FIELDS = {
             KEYSPACE => {:type => ::Thrift::Types::STRING, :name => 'keyspace'},
             KEYS => {:type => ::Thrift::Types::LIST, :name => 'keys', :element => {:type => ::Thrift::Types::STRING}},
-            COLUMN_PATH => {:type => ::Thrift::Types::STRUCT, :name => 'column_path', :class => CassandraThrift::ColumnPath},
-            CONSISTENCY_LEVEL => {:type => ::Thrift::Types::I32, :name => 'consistency_level', :default =>             1, :enum_class => CassandraThrift::ConsistencyLevel}
+            COLUMN_PATH => {:type => ::Thrift::Types::STRUCT, :name => 'column_path', :class => CCassandraThrift::ColumnPath},
+            CONSISTENCY_LEVEL => {:type => ::Thrift::Types::I32, :name => 'consistency_level', :default =>             1, :enum_class => CCassandraThrift::ConsistencyLevel}
           }
 
           def struct_fields; FIELDS; end
@@ -760,7 +760,7 @@ require 'cassandra_constants'
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field keys is unset!') unless @keys
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field column_path is unset!') unless @column_path
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field consistency_level is unset!') unless @consistency_level
-            unless @consistency_level.nil? || CassandraThrift::ConsistencyLevel::VALID_VALUES.include?(@consistency_level)
+            unless @consistency_level.nil? || CCassandraThrift::ConsistencyLevel::VALID_VALUES.include?(@consistency_level)
               raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field consistency_level!')
             end
           end
@@ -776,10 +776,10 @@ require 'cassandra_constants'
           TE = 3
 
           FIELDS = {
-            SUCCESS => {:type => ::Thrift::Types::MAP, :name => 'success', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::STRUCT, :class => CassandraThrift::ColumnOrSuperColumn}},
-            IRE => {:type => ::Thrift::Types::STRUCT, :name => 'ire', :class => CassandraThrift::InvalidRequestException},
-            UE => {:type => ::Thrift::Types::STRUCT, :name => 'ue', :class => CassandraThrift::UnavailableException},
-            TE => {:type => ::Thrift::Types::STRUCT, :name => 'te', :class => CassandraThrift::TimedOutException}
+            SUCCESS => {:type => ::Thrift::Types::MAP, :name => 'success', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::STRUCT, :class => CCassandraThrift::ColumnOrSuperColumn}},
+            IRE => {:type => ::Thrift::Types::STRUCT, :name => 'ire', :class => CCassandraThrift::InvalidRequestException},
+            UE => {:type => ::Thrift::Types::STRUCT, :name => 'ue', :class => CCassandraThrift::UnavailableException},
+            TE => {:type => ::Thrift::Types::STRUCT, :name => 'te', :class => CCassandraThrift::TimedOutException}
           }
 
           def struct_fields; FIELDS; end
@@ -801,9 +801,9 @@ require 'cassandra_constants'
           FIELDS = {
             KEYSPACE => {:type => ::Thrift::Types::STRING, :name => 'keyspace'},
             KEYS => {:type => ::Thrift::Types::LIST, :name => 'keys', :element => {:type => ::Thrift::Types::STRING}},
-            COLUMN_PARENT => {:type => ::Thrift::Types::STRUCT, :name => 'column_parent', :class => CassandraThrift::ColumnParent},
-            PREDICATE => {:type => ::Thrift::Types::STRUCT, :name => 'predicate', :class => CassandraThrift::SlicePredicate},
-            CONSISTENCY_LEVEL => {:type => ::Thrift::Types::I32, :name => 'consistency_level', :default =>             1, :enum_class => CassandraThrift::ConsistencyLevel}
+            COLUMN_PARENT => {:type => ::Thrift::Types::STRUCT, :name => 'column_parent', :class => CCassandraThrift::ColumnParent},
+            PREDICATE => {:type => ::Thrift::Types::STRUCT, :name => 'predicate', :class => CCassandraThrift::SlicePredicate},
+            CONSISTENCY_LEVEL => {:type => ::Thrift::Types::I32, :name => 'consistency_level', :default =>             1, :enum_class => CCassandraThrift::ConsistencyLevel}
           }
 
           def struct_fields; FIELDS; end
@@ -814,7 +814,7 @@ require 'cassandra_constants'
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field column_parent is unset!') unless @column_parent
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field predicate is unset!') unless @predicate
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field consistency_level is unset!') unless @consistency_level
-            unless @consistency_level.nil? || CassandraThrift::ConsistencyLevel::VALID_VALUES.include?(@consistency_level)
+            unless @consistency_level.nil? || CCassandraThrift::ConsistencyLevel::VALID_VALUES.include?(@consistency_level)
               raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field consistency_level!')
             end
           end
@@ -830,10 +830,10 @@ require 'cassandra_constants'
           TE = 3
 
           FIELDS = {
-            SUCCESS => {:type => ::Thrift::Types::MAP, :name => 'success', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::LIST, :element => {:type => ::Thrift::Types::STRUCT, :class => CassandraThrift::ColumnOrSuperColumn}}},
-            IRE => {:type => ::Thrift::Types::STRUCT, :name => 'ire', :class => CassandraThrift::InvalidRequestException},
-            UE => {:type => ::Thrift::Types::STRUCT, :name => 'ue', :class => CassandraThrift::UnavailableException},
-            TE => {:type => ::Thrift::Types::STRUCT, :name => 'te', :class => CassandraThrift::TimedOutException}
+            SUCCESS => {:type => ::Thrift::Types::MAP, :name => 'success', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::LIST, :element => {:type => ::Thrift::Types::STRUCT, :class => CCassandraThrift::ColumnOrSuperColumn}}},
+            IRE => {:type => ::Thrift::Types::STRUCT, :name => 'ire', :class => CCassandraThrift::InvalidRequestException},
+            UE => {:type => ::Thrift::Types::STRUCT, :name => 'ue', :class => CCassandraThrift::UnavailableException},
+            TE => {:type => ::Thrift::Types::STRUCT, :name => 'te', :class => CCassandraThrift::TimedOutException}
           }
 
           def struct_fields; FIELDS; end
@@ -854,8 +854,8 @@ require 'cassandra_constants'
           FIELDS = {
             KEYSPACE => {:type => ::Thrift::Types::STRING, :name => 'keyspace'},
             KEY => {:type => ::Thrift::Types::STRING, :name => 'key'},
-            COLUMN_PARENT => {:type => ::Thrift::Types::STRUCT, :name => 'column_parent', :class => CassandraThrift::ColumnParent},
-            CONSISTENCY_LEVEL => {:type => ::Thrift::Types::I32, :name => 'consistency_level', :default =>             1, :enum_class => CassandraThrift::ConsistencyLevel}
+            COLUMN_PARENT => {:type => ::Thrift::Types::STRUCT, :name => 'column_parent', :class => CCassandraThrift::ColumnParent},
+            CONSISTENCY_LEVEL => {:type => ::Thrift::Types::I32, :name => 'consistency_level', :default =>             1, :enum_class => CCassandraThrift::ConsistencyLevel}
           }
 
           def struct_fields; FIELDS; end
@@ -865,7 +865,7 @@ require 'cassandra_constants'
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field key is unset!') unless @key
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field column_parent is unset!') unless @column_parent
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field consistency_level is unset!') unless @consistency_level
-            unless @consistency_level.nil? || CassandraThrift::ConsistencyLevel::VALID_VALUES.include?(@consistency_level)
+            unless @consistency_level.nil? || CCassandraThrift::ConsistencyLevel::VALID_VALUES.include?(@consistency_level)
               raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field consistency_level!')
             end
           end
@@ -882,9 +882,9 @@ require 'cassandra_constants'
 
           FIELDS = {
             SUCCESS => {:type => ::Thrift::Types::I32, :name => 'success'},
-            IRE => {:type => ::Thrift::Types::STRUCT, :name => 'ire', :class => CassandraThrift::InvalidRequestException},
-            UE => {:type => ::Thrift::Types::STRUCT, :name => 'ue', :class => CassandraThrift::UnavailableException},
-            TE => {:type => ::Thrift::Types::STRUCT, :name => 'te', :class => CassandraThrift::TimedOutException}
+            IRE => {:type => ::Thrift::Types::STRUCT, :name => 'ire', :class => CCassandraThrift::InvalidRequestException},
+            UE => {:type => ::Thrift::Types::STRUCT, :name => 'ue', :class => CCassandraThrift::UnavailableException},
+            TE => {:type => ::Thrift::Types::STRUCT, :name => 'te', :class => CCassandraThrift::TimedOutException}
           }
 
           def struct_fields; FIELDS; end
@@ -907,12 +907,12 @@ require 'cassandra_constants'
 
           FIELDS = {
             KEYSPACE => {:type => ::Thrift::Types::STRING, :name => 'keyspace'},
-            COLUMN_PARENT => {:type => ::Thrift::Types::STRUCT, :name => 'column_parent', :class => CassandraThrift::ColumnParent},
-            PREDICATE => {:type => ::Thrift::Types::STRUCT, :name => 'predicate', :class => CassandraThrift::SlicePredicate},
+            COLUMN_PARENT => {:type => ::Thrift::Types::STRUCT, :name => 'column_parent', :class => CCassandraThrift::ColumnParent},
+            PREDICATE => {:type => ::Thrift::Types::STRUCT, :name => 'predicate', :class => CCassandraThrift::SlicePredicate},
             START_KEY => {:type => ::Thrift::Types::STRING, :name => 'start_key', :default => %q""},
             FINISH_KEY => {:type => ::Thrift::Types::STRING, :name => 'finish_key', :default => %q""},
             ROW_COUNT => {:type => ::Thrift::Types::I32, :name => 'row_count', :default => 100},
-            CONSISTENCY_LEVEL => {:type => ::Thrift::Types::I32, :name => 'consistency_level', :default =>             1, :enum_class => CassandraThrift::ConsistencyLevel}
+            CONSISTENCY_LEVEL => {:type => ::Thrift::Types::I32, :name => 'consistency_level', :default =>             1, :enum_class => CCassandraThrift::ConsistencyLevel}
           }
 
           def struct_fields; FIELDS; end
@@ -925,7 +925,7 @@ require 'cassandra_constants'
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field finish_key is unset!') unless @finish_key
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field row_count is unset!') unless @row_count
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field consistency_level is unset!') unless @consistency_level
-            unless @consistency_level.nil? || CassandraThrift::ConsistencyLevel::VALID_VALUES.include?(@consistency_level)
+            unless @consistency_level.nil? || CCassandraThrift::ConsistencyLevel::VALID_VALUES.include?(@consistency_level)
               raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field consistency_level!')
             end
           end
@@ -941,10 +941,10 @@ require 'cassandra_constants'
           TE = 3
 
           FIELDS = {
-            SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => CassandraThrift::KeySlice}},
-            IRE => {:type => ::Thrift::Types::STRUCT, :name => 'ire', :class => CassandraThrift::InvalidRequestException},
-            UE => {:type => ::Thrift::Types::STRUCT, :name => 'ue', :class => CassandraThrift::UnavailableException},
-            TE => {:type => ::Thrift::Types::STRUCT, :name => 'te', :class => CassandraThrift::TimedOutException}
+            SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => CCassandraThrift::KeySlice}},
+            IRE => {:type => ::Thrift::Types::STRUCT, :name => 'ire', :class => CCassandraThrift::InvalidRequestException},
+            UE => {:type => ::Thrift::Types::STRUCT, :name => 'ue', :class => CCassandraThrift::UnavailableException},
+            TE => {:type => ::Thrift::Types::STRUCT, :name => 'te', :class => CCassandraThrift::TimedOutException}
           }
 
           def struct_fields; FIELDS; end
@@ -965,10 +965,10 @@ require 'cassandra_constants'
 
           FIELDS = {
             KEYSPACE => {:type => ::Thrift::Types::STRING, :name => 'keyspace'},
-            COLUMN_PARENT => {:type => ::Thrift::Types::STRUCT, :name => 'column_parent', :class => CassandraThrift::ColumnParent},
-            PREDICATE => {:type => ::Thrift::Types::STRUCT, :name => 'predicate', :class => CassandraThrift::SlicePredicate},
-            RANGE => {:type => ::Thrift::Types::STRUCT, :name => 'range', :class => CassandraThrift::KeyRange},
-            CONSISTENCY_LEVEL => {:type => ::Thrift::Types::I32, :name => 'consistency_level', :default =>             1, :enum_class => CassandraThrift::ConsistencyLevel}
+            COLUMN_PARENT => {:type => ::Thrift::Types::STRUCT, :name => 'column_parent', :class => CCassandraThrift::ColumnParent},
+            PREDICATE => {:type => ::Thrift::Types::STRUCT, :name => 'predicate', :class => CCassandraThrift::SlicePredicate},
+            RANGE => {:type => ::Thrift::Types::STRUCT, :name => 'range', :class => CCassandraThrift::KeyRange},
+            CONSISTENCY_LEVEL => {:type => ::Thrift::Types::I32, :name => 'consistency_level', :default =>             1, :enum_class => CCassandraThrift::ConsistencyLevel}
           }
 
           def struct_fields; FIELDS; end
@@ -979,7 +979,7 @@ require 'cassandra_constants'
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field predicate is unset!') unless @predicate
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field range is unset!') unless @range
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field consistency_level is unset!') unless @consistency_level
-            unless @consistency_level.nil? || CassandraThrift::ConsistencyLevel::VALID_VALUES.include?(@consistency_level)
+            unless @consistency_level.nil? || CCassandraThrift::ConsistencyLevel::VALID_VALUES.include?(@consistency_level)
               raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field consistency_level!')
             end
           end
@@ -995,10 +995,10 @@ require 'cassandra_constants'
           TE = 3
 
           FIELDS = {
-            SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => CassandraThrift::KeySlice}},
-            IRE => {:type => ::Thrift::Types::STRUCT, :name => 'ire', :class => CassandraThrift::InvalidRequestException},
-            UE => {:type => ::Thrift::Types::STRUCT, :name => 'ue', :class => CassandraThrift::UnavailableException},
-            TE => {:type => ::Thrift::Types::STRUCT, :name => 'te', :class => CassandraThrift::TimedOutException}
+            SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => CCassandraThrift::KeySlice}},
+            IRE => {:type => ::Thrift::Types::STRUCT, :name => 'ire', :class => CCassandraThrift::InvalidRequestException},
+            UE => {:type => ::Thrift::Types::STRUCT, :name => 'ue', :class => CCassandraThrift::UnavailableException},
+            TE => {:type => ::Thrift::Types::STRUCT, :name => 'te', :class => CCassandraThrift::TimedOutException}
           }
 
           def struct_fields; FIELDS; end
@@ -1021,10 +1021,10 @@ require 'cassandra_constants'
           FIELDS = {
             KEYSPACE => {:type => ::Thrift::Types::STRING, :name => 'keyspace'},
             KEY => {:type => ::Thrift::Types::STRING, :name => 'key'},
-            COLUMN_PATH => {:type => ::Thrift::Types::STRUCT, :name => 'column_path', :class => CassandraThrift::ColumnPath},
+            COLUMN_PATH => {:type => ::Thrift::Types::STRUCT, :name => 'column_path', :class => CCassandraThrift::ColumnPath},
             VALUE => {:type => ::Thrift::Types::STRING, :name => 'value', :binary => true},
             TIMESTAMP => {:type => ::Thrift::Types::I64, :name => 'timestamp'},
-            CONSISTENCY_LEVEL => {:type => ::Thrift::Types::I32, :name => 'consistency_level', :default =>             1, :enum_class => CassandraThrift::ConsistencyLevel}
+            CONSISTENCY_LEVEL => {:type => ::Thrift::Types::I32, :name => 'consistency_level', :default =>             1, :enum_class => CCassandraThrift::ConsistencyLevel}
           }
 
           def struct_fields; FIELDS; end
@@ -1036,7 +1036,7 @@ require 'cassandra_constants'
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field value is unset!') unless @value
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field timestamp is unset!') unless @timestamp
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field consistency_level is unset!') unless @consistency_level
-            unless @consistency_level.nil? || CassandraThrift::ConsistencyLevel::VALID_VALUES.include?(@consistency_level)
+            unless @consistency_level.nil? || CCassandraThrift::ConsistencyLevel::VALID_VALUES.include?(@consistency_level)
               raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field consistency_level!')
             end
           end
@@ -1051,9 +1051,9 @@ require 'cassandra_constants'
           TE = 3
 
           FIELDS = {
-            IRE => {:type => ::Thrift::Types::STRUCT, :name => 'ire', :class => CassandraThrift::InvalidRequestException},
-            UE => {:type => ::Thrift::Types::STRUCT, :name => 'ue', :class => CassandraThrift::UnavailableException},
-            TE => {:type => ::Thrift::Types::STRUCT, :name => 'te', :class => CassandraThrift::TimedOutException}
+            IRE => {:type => ::Thrift::Types::STRUCT, :name => 'ire', :class => CCassandraThrift::InvalidRequestException},
+            UE => {:type => ::Thrift::Types::STRUCT, :name => 'ue', :class => CCassandraThrift::UnavailableException},
+            TE => {:type => ::Thrift::Types::STRUCT, :name => 'te', :class => CCassandraThrift::TimedOutException}
           }
 
           def struct_fields; FIELDS; end
@@ -1074,8 +1074,8 @@ require 'cassandra_constants'
           FIELDS = {
             KEYSPACE => {:type => ::Thrift::Types::STRING, :name => 'keyspace'},
             KEY => {:type => ::Thrift::Types::STRING, :name => 'key'},
-            CFMAP => {:type => ::Thrift::Types::MAP, :name => 'cfmap', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::LIST, :element => {:type => ::Thrift::Types::STRUCT, :class => CassandraThrift::ColumnOrSuperColumn}}},
-            CONSISTENCY_LEVEL => {:type => ::Thrift::Types::I32, :name => 'consistency_level', :default =>             1, :enum_class => CassandraThrift::ConsistencyLevel}
+            CFMAP => {:type => ::Thrift::Types::MAP, :name => 'cfmap', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::LIST, :element => {:type => ::Thrift::Types::STRUCT, :class => CCassandraThrift::ColumnOrSuperColumn}}},
+            CONSISTENCY_LEVEL => {:type => ::Thrift::Types::I32, :name => 'consistency_level', :default =>             1, :enum_class => CCassandraThrift::ConsistencyLevel}
           }
 
           def struct_fields; FIELDS; end
@@ -1085,7 +1085,7 @@ require 'cassandra_constants'
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field key is unset!') unless @key
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field cfmap is unset!') unless @cfmap
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field consistency_level is unset!') unless @consistency_level
-            unless @consistency_level.nil? || CassandraThrift::ConsistencyLevel::VALID_VALUES.include?(@consistency_level)
+            unless @consistency_level.nil? || CCassandraThrift::ConsistencyLevel::VALID_VALUES.include?(@consistency_level)
               raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field consistency_level!')
             end
           end
@@ -1100,9 +1100,9 @@ require 'cassandra_constants'
           TE = 3
 
           FIELDS = {
-            IRE => {:type => ::Thrift::Types::STRUCT, :name => 'ire', :class => CassandraThrift::InvalidRequestException},
-            UE => {:type => ::Thrift::Types::STRUCT, :name => 'ue', :class => CassandraThrift::UnavailableException},
-            TE => {:type => ::Thrift::Types::STRUCT, :name => 'te', :class => CassandraThrift::TimedOutException}
+            IRE => {:type => ::Thrift::Types::STRUCT, :name => 'ire', :class => CCassandraThrift::InvalidRequestException},
+            UE => {:type => ::Thrift::Types::STRUCT, :name => 'ue', :class => CCassandraThrift::UnavailableException},
+            TE => {:type => ::Thrift::Types::STRUCT, :name => 'te', :class => CCassandraThrift::TimedOutException}
           }
 
           def struct_fields; FIELDS; end
@@ -1124,9 +1124,9 @@ require 'cassandra_constants'
           FIELDS = {
             KEYSPACE => {:type => ::Thrift::Types::STRING, :name => 'keyspace'},
             KEY => {:type => ::Thrift::Types::STRING, :name => 'key'},
-            COLUMN_PATH => {:type => ::Thrift::Types::STRUCT, :name => 'column_path', :class => CassandraThrift::ColumnPath},
+            COLUMN_PATH => {:type => ::Thrift::Types::STRUCT, :name => 'column_path', :class => CCassandraThrift::ColumnPath},
             TIMESTAMP => {:type => ::Thrift::Types::I64, :name => 'timestamp'},
-            CONSISTENCY_LEVEL => {:type => ::Thrift::Types::I32, :name => 'consistency_level', :default =>             1, :enum_class => CassandraThrift::ConsistencyLevel}
+            CONSISTENCY_LEVEL => {:type => ::Thrift::Types::I32, :name => 'consistency_level', :default =>             1, :enum_class => CCassandraThrift::ConsistencyLevel}
           }
 
           def struct_fields; FIELDS; end
@@ -1136,7 +1136,7 @@ require 'cassandra_constants'
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field key is unset!') unless @key
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field column_path is unset!') unless @column_path
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field timestamp is unset!') unless @timestamp
-            unless @consistency_level.nil? || CassandraThrift::ConsistencyLevel::VALID_VALUES.include?(@consistency_level)
+            unless @consistency_level.nil? || CCassandraThrift::ConsistencyLevel::VALID_VALUES.include?(@consistency_level)
               raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field consistency_level!')
             end
           end
@@ -1151,9 +1151,9 @@ require 'cassandra_constants'
           TE = 3
 
           FIELDS = {
-            IRE => {:type => ::Thrift::Types::STRUCT, :name => 'ire', :class => CassandraThrift::InvalidRequestException},
-            UE => {:type => ::Thrift::Types::STRUCT, :name => 'ue', :class => CassandraThrift::UnavailableException},
-            TE => {:type => ::Thrift::Types::STRUCT, :name => 'te', :class => CassandraThrift::TimedOutException}
+            IRE => {:type => ::Thrift::Types::STRUCT, :name => 'ire', :class => CCassandraThrift::InvalidRequestException},
+            UE => {:type => ::Thrift::Types::STRUCT, :name => 'ue', :class => CCassandraThrift::UnavailableException},
+            TE => {:type => ::Thrift::Types::STRUCT, :name => 'te', :class => CCassandraThrift::TimedOutException}
           }
 
           def struct_fields; FIELDS; end
@@ -1172,8 +1172,8 @@ require 'cassandra_constants'
 
           FIELDS = {
             KEYSPACE => {:type => ::Thrift::Types::STRING, :name => 'keyspace'},
-            MUTATION_MAP => {:type => ::Thrift::Types::MAP, :name => 'mutation_map', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::MAP, :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::LIST, :element => {:type => ::Thrift::Types::STRUCT, :class => CassandraThrift::Mutation}}}},
-            CONSISTENCY_LEVEL => {:type => ::Thrift::Types::I32, :name => 'consistency_level', :default =>             1, :enum_class => CassandraThrift::ConsistencyLevel}
+            MUTATION_MAP => {:type => ::Thrift::Types::MAP, :name => 'mutation_map', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::MAP, :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::LIST, :element => {:type => ::Thrift::Types::STRUCT, :class => CCassandraThrift::Mutation}}}},
+            CONSISTENCY_LEVEL => {:type => ::Thrift::Types::I32, :name => 'consistency_level', :default =>             1, :enum_class => CCassandraThrift::ConsistencyLevel}
           }
 
           def struct_fields; FIELDS; end
@@ -1182,7 +1182,7 @@ require 'cassandra_constants'
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field keyspace is unset!') unless @keyspace
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field mutation_map is unset!') unless @mutation_map
             raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Required field consistency_level is unset!') unless @consistency_level
-            unless @consistency_level.nil? || CassandraThrift::ConsistencyLevel::VALID_VALUES.include?(@consistency_level)
+            unless @consistency_level.nil? || CCassandraThrift::ConsistencyLevel::VALID_VALUES.include?(@consistency_level)
               raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field consistency_level!')
             end
           end
@@ -1197,9 +1197,9 @@ require 'cassandra_constants'
           TE = 3
 
           FIELDS = {
-            IRE => {:type => ::Thrift::Types::STRUCT, :name => 'ire', :class => CassandraThrift::InvalidRequestException},
-            UE => {:type => ::Thrift::Types::STRUCT, :name => 'ue', :class => CassandraThrift::UnavailableException},
-            TE => {:type => ::Thrift::Types::STRUCT, :name => 'te', :class => CassandraThrift::TimedOutException}
+            IRE => {:type => ::Thrift::Types::STRUCT, :name => 'ire', :class => CCassandraThrift::InvalidRequestException},
+            UE => {:type => ::Thrift::Types::STRUCT, :name => 'ue', :class => CCassandraThrift::UnavailableException},
+            TE => {:type => ::Thrift::Types::STRUCT, :name => 'te', :class => CCassandraThrift::TimedOutException}
           }
 
           def struct_fields; FIELDS; end
@@ -1391,7 +1391,7 @@ require 'cassandra_constants'
           SUCCESS = 0
 
           FIELDS = {
-            SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => CassandraThrift::TokenRange}}
+            SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => CCassandraThrift::TokenRange}}
           }
 
           def struct_fields; FIELDS; end
@@ -1426,7 +1426,7 @@ require 'cassandra_constants'
 
           FIELDS = {
             SUCCESS => {:type => ::Thrift::Types::MAP, :name => 'success', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::MAP, :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::STRING}}},
-            NFE => {:type => ::Thrift::Types::STRUCT, :name => 'nfe', :class => CassandraThrift::NotFoundException}
+            NFE => {:type => ::Thrift::Types::STRUCT, :name => 'nfe', :class => CCassandraThrift::NotFoundException}
           }
 
           def struct_fields; FIELDS; end

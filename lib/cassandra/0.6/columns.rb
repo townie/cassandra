@@ -1,4 +1,4 @@
-class Cassandra
+class CCassandra
   # A bunch of crap, mostly related to introspecting on column types
   module Columns #:nodoc:
     private
@@ -23,9 +23,9 @@ class Cassandra
     end
 
     def _standard_insert_mutation(column_family, column_name, value, timestamp, _=nil)
-      CassandraThrift::Mutation.new(
-        :column_or_supercolumn => CassandraThrift::ColumnOrSuperColumn.new(
-          :column => CassandraThrift::Column.new(
+      CCassandraThrift::Mutation.new(
+        :column_or_supercolumn => CCassandraThrift::ColumnOrSuperColumn.new(
+          :column => CCassandraThrift::Column.new(
             :name      => column_name_class(column_family).new(column_name).to_s,
             :value     => value,
             :timestamp => timestamp
@@ -35,12 +35,12 @@ class Cassandra
     end
 
     def _super_insert_mutation(column_family, super_column_name, sub_columns, timestamp, _=nil)
-      CassandraThrift::Mutation.new(:column_or_supercolumn => 
-        CassandraThrift::ColumnOrSuperColumn.new(
-          :super_column => CassandraThrift::SuperColumn.new(
+      CCassandraThrift::Mutation.new(:column_or_supercolumn =>
+        CCassandraThrift::ColumnOrSuperColumn.new(
+          :super_column => CCassandraThrift::SuperColumn.new(
             :name => column_name_class(column_family).new(super_column_name).to_s,
             :columns => sub_columns.collect { |sub_column_name, sub_column_value|
-              CassandraThrift::Column.new(
+              CCassandraThrift::Column.new(
                 :name      => sub_column_name_class(column_family).new(sub_column_name).to_s,
                 :value     => sub_column_value.to_s,
                 :timestamp => timestamp
@@ -53,12 +53,12 @@ class Cassandra
 
     # General info about a deletion object within a mutation
     # timestamp - required. If this is the only param, it will cause deletion of the whole key at that TS
-    # supercolumn - opt. If passed, the deletes will only occur within that supercolumn (only subcolumns 
+    # supercolumn - opt. If passed, the deletes will only occur within that supercolumn (only subcolumns
     #               will be deleted). Otherwise the normal columns will be deleted.
-    # predicate - opt. Defines how to match the columns to delete. if supercolumn passed, the slice will 
+    # predicate - opt. Defines how to match the columns to delete. if supercolumn passed, the slice will
     #               be scoped to subcolumns of that supercolumn.
-    
-    # Deletes a single column from the containing key/CF (and possibly supercolumn), at a given timestamp. 
+
+    # Deletes a single column from the containing key/CF (and possibly supercolumn), at a given timestamp.
     # Although mutations (as opposed to 'remove' calls) support deleting slices and lists of columns in one shot, this is not implemented here.
     # The main reason being that the batch function takes removes, but removes don't have that capability...so we'd need to change the remove
     # methods to use delete mutation calls...although that might have performance implications. We'll leave that refactoring for later.
@@ -66,12 +66,12 @@ class Cassandra
       deletion_hash = {:timestamp => timestamp}
       if is_super(cf)
         deletion_hash[:super_column] = column if column
-        deletion_hash[:predicate] = CassandraThrift::SlicePredicate.new(:column_names => [subcolumn]) if subcolumn
+        deletion_hash[:predicate] = CCassandraThrift::SlicePredicate.new(:column_names => [subcolumn]) if subcolumn
       else
-        deletion_hash[:predicate] = CassandraThrift::SlicePredicate.new(:column_names => [column]) if column
+        deletion_hash[:predicate] = CCassandraThrift::SlicePredicate.new(:column_names => [column]) if column
       end
-      CassandraThrift::Mutation.new(
-        :deletion => CassandraThrift::Deletion.new(deletion_hash)
+      CCassandraThrift::Mutation.new(
+        :deletion => CCassandraThrift::Deletion.new(deletion_hash)
       )
     end
   end

@@ -1,3 +1,3 @@
-class Cassandra
-  class Keyspace < CassandraThrift::KsDef ; end
+class CCassandra
+  class Keyspace < CCassandraThrift::KsDef ; end
 end

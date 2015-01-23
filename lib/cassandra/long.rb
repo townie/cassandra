@@ -1,9 +1,9 @@
 
-class Cassandra
-  # A temporally-ordered Long class for use in Cassandra column names
+class CCassandra
+  # A temporally-ordered Long class for use in CCassandra column names
   class Long < Comparable
 
-    # FIXME Should unify with or subclass Cassandra::UUID
+    # FIXME Should unify with or subclass CCassandra::UUID
     def initialize(bytes = nil)
       case bytes
       when self.class # Long
@@ -41,10 +41,10 @@ class Cassandra
 
     def to_guid
       "%08x-%04x-%04x" % @bytes.unpack("Nnn")
-    end    
+    end
 
     def inspect
-      "<Cassandra::Long##{object_id} time: #{
+      "<CCassandra::Long##{object_id} time: #{
         Time.at((to_i >> 12) / 1_000_000).utc.inspect
       }, usecs: #{
         (to_i >> 12) % 1_000_000

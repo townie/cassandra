@@ -1,12 +1,12 @@
 # cassandra
-A Ruby client for the Cassandra distributed database.
+A Ruby client for the CCassandra distributed database.
 
-Supports 1.8.7, 1.9.2, 1.9.3, 2.0.0, 2.1 and rubinius on Cassandra 0.7.x through 2.0.x.
+Supports 1.8.7, 1.9.2, 1.9.3, 2.0.0, 2.1 and rubinius on CCassandra 0.7.x through 2.0.x.
 
 ## Status of this gem
 
 There is no longer much development effort being put into this gem. If you
-are just getting started with Cassandra then you probably want to use the Datastax
+are just getting started with CCassandra then you probably want to use the Datastax
 [ruby-driver](https://github.com/datastax/ruby-driver).
 
 We are still happy to take patches if you want to improve this gem.
@@ -17,16 +17,16 @@ Here is a quick sample of the general use (more details in Read/Write
 API below):
 
     require 'cassandra'
-    client = Cassandra.new('Twitter', '127.0.0.1:9160')
+    client = CCassandra.new('Twitter', '127.0.0.1:9160')
     client.insert(:Users, "5", {'screen_name' => "buttonscat"})
 
 ## License
 
 Copyright 2009-2011 Twitter, Inc. See included LICENSE file. Portions copyright 2004-2009 David Heinemeier Hansson, and used with permission.
 
-## Cassandra Version
+## CCassandra Version
 
-The Cassandra project is under very active development, and as such
+The CCassandra project is under very active development, and as such
 there are a few different versions that you may need to use this gem
 with.  We have set up an easy sure fire mechanism for selecting the
 specific version that you are connecting to while requiring the gem.
@@ -128,7 +128,7 @@ Example:
 
 ### get
 
-Return a hash (actually, a Cassandra::OrderedHash) or a single value
+Return a hash (actually, a CCassandra::OrderedHash) or a single value
 representing the element at the column_family:key:[column]:[sub_column]
 path you request.
 
@@ -151,13 +151,13 @@ Example:
 
 ### multi\_get
 
-Multi-key version of Cassandra#get.
+Multi-key version of CCassandra#get.
 
 This method allows you to select multiple rows with a single query.
 If a key that is passed in doesn't exist an empty hash will be
 returned.
 
-Supports the same parameters as Cassandra#get.
+Supports the same parameters as CCassandra#get.
 
 * column_family - The column_family that you are working with.
 * key - An array of keys to select.
@@ -209,16 +209,16 @@ Example:
     @client.exists?(:Statuses, 'key', 'bogus')          # returns false
 
 ### get\_range
-Return an Cassandra::OrderedHash containing the columns specified for the given
+Return an CCassandra::OrderedHash containing the columns specified for the given
 range of keys in the column\_family you request.
 
-This method is just a convenience wrapper around Cassandra#get_range_single
-and Cassandra#get\_range\_batch. If :key\_size, :batch\_size, or a block
-is passed in Cassandra#get\_range\_batch will be called. Otherwise
-Cassandra#get\_range\_single will be used.
+This method is just a convenience wrapper around CCassandra#get_range_single
+and CCassandra#get\_range\_batch. If :key\_size, :batch\_size, or a block
+is passed in CCassandra#get\_range\_batch will be called. Otherwise
+CCassandra#get\_range\_single will be used.
 
 The start\_key and finish\_key parameters are only useful for iterating of all records
-as is done in the Cassandra#each and Cassandra#each\_key methods if you are using the
+as is done in the CCassandra#each and CCassandra#each\_key methods if you are using the
 RandomPartitioner.
 
 If the table is partitioned with OrderPreservingPartitioner you may
@@ -228,7 +228,7 @@ the same prefix value.
 If a block is passed in we will yield the row key and columns for
 each record returned.
 
-Please note that Cassandra returns a row for each row that has existed in the
+Please note that CCassandra returns a row for each row that has existed in the
 system since gc\_grace\_seconds. This is because deleted row keys are marked as
 deleted, but left in the system until the cluster has had resonable time to replicate the deletion.
 This function attempts to suppress deleted rows (actually any row returned without
@@ -267,27 +267,27 @@ Example:
 
 Return an Array containing all of the keys within a given range.
 
-This method just calls Cassandra#get\_range and returns the
+This method just calls CCassandra#get\_range and returns the
 row keys for the records returned.
 
-See Cassandra#get\_range for options.
+See CCassandra#get\_range for options.
 
 ### get\_range\_keys
 
 Return an Array containing all of the keys within a given range.
 
-This method just calls Cassandra#get\_range and returns the
+This method just calls CCassandra#get\_range and returns the
 row keys for the records returned.
 
-See Cassandra#get\_range for options.
+See CCassandra#get\_range for options.
 
 ### each\_key
 Iterate through each key within the given range parameters. This function can be
 used to iterate over each key in the given column family.
 
-This method just calls Cassandra#get\_range and yields each row key.
+This method just calls CCassandra#get\_range and yields each row key.
 
-See Cassandra#get\_range for options.
+See CCassandra#get\_range for options.
 
 Example:
     10.times do |i|
@@ -303,27 +303,27 @@ Example:
 ### each
 Iterate through each row within the given column\_family.
 
-This method just calls Cassandra#get\_range and yields the key and
+This method just calls CCassandra#get\_range and yields the key and
 columns.
 
-See Cassandra#get\_range for options.
+See CCassandra#get\_range for options.
 
 ### get\_index\_slices
 This method is used to query a secondary index with a set of
 provided search parameters
 
 Please note that you can either specify a
-CassandraThrift::IndexClause or an array of hashes with the
+CCassandraThrift::IndexClause or an array of hashes with the
 format as below.
 
 * column\_family     - The Column Family this operation will be run on.
-* index\_clause      - This can either be a CassandraThrift::IndexClause or an array of hashes with the following keys:
+* index\_clause      - This can either be a CCassandraThrift::IndexClause or an array of hashes with the following keys:
   * :column\_name - Column to be compared
   * :value       - Value to compare against
   * :comparison  - Type of comparison to do.
 * options
-  * :key\_count    - Set maximum number of rows to return. (Only works if CassandraThrift::IndexClause is not passed in.)
-  * :key\_start    - Set starting row key for search. (Only works if CassandraThrift::IndexClause is not passed in.)
+  * :key\_count    - Set maximum number of rows to return. (Only works if CCassandraThrift::IndexClause is not passed in.)
+  * :key\_start    - Set starting row key for search. (Only works if CCassandraThrift::IndexClause is not passed in.)
   * :consistency
 
 Example:
@@ -378,4 +378,4 @@ Example:
 
 ## Reporting Problems
 
-The Github issue tracker is [here](http://github.com/cassandra-rb/cassandra/issues). If you have problems with this library or Cassandra itself, please use the [cassandra-user mailing list](http://mail-archives.apache.org/mod_mbox/incubator-cassandra-user/).
+The Github issue tracker is [here](http://github.com/cassandra-rb/cassandra/issues). If you have problems with this library or CCassandra itself, please use the [cassandra-user mailing list](http://mail-archives.apache.org/mod_mbox/incubator-cassandra-user/).

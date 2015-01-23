@@ -1,5 +1,5 @@
 
-class Cassandra
+class CCassandra
   # A bunch of crap, mostly related to introspecting on column types
   module Columns #:nodoc:
     private
@@ -99,15 +99,15 @@ class Cassandra
     def columns_to_hash_for_classes(columns, column_name_maker, sub_column_name_maker = nil)
       hash = OrderedHash.new
       Array(columns).each do |c|
-        c = c.super_column || c.column || c.counter_column || c.counter_super_column if c.is_a?(CassandraThrift::ColumnOrSuperColumn)
+        c = c.super_column || c.column || c.counter_column || c.counter_super_column if c.is_a?(CCassandraThrift::ColumnOrSuperColumn)
         case c
-        when CassandraThrift::SuperColumn
+        when CCassandraThrift::SuperColumn
           hash.[]=(column_name_maker.call(c.name), columns_to_hash_for_classes(c.columns, sub_column_name_maker)) # Pop the class stack, and recurse
-        when CassandraThrift::Column
+        when CCassandraThrift::Column
           hash.[]=(column_name_maker.call(c.name), c.value, c.timestamp)
-        when CassandraThrift::CounterColumn
+        when CCassandraThrift::CounterColumn
           hash.[]=(column_name_maker.call(c.name), c.value, 0)
-        when CassandraThrift::CounterSuperColumn
+        when CCassandraThrift::CounterSuperColumn
           hash.[]=(column_name_maker.call(c.name), columns_to_hash_for_classes(c.columns, sub_column_name_maker)) # Pop the class stack, and recurse
         end
       end
@@ -115,9 +115,9 @@ class Cassandra
     end
 
     def _standard_insert_mutation(column_family, column_name, value, timestamp, ttl = nil)
-      CassandraThrift::Mutation.new(
-        :column_or_supercolumn => CassandraThrift::ColumnOrSuperColumn.new(
-          :column => CassandraThrift::Column.new(
+      CCassandraThrift::Mutation.new(
+        :column_or_supercolumn => CCassandraThrift::ColumnOrSuperColumn.new(
+          :column => CCassandraThrift::Column.new(
             :name      => column_name_class(column_family).new(column_name).to_s,
             :value     => value,
             :timestamp => timestamp,
@@ -128,12 +128,12 @@ class Cassandra
     end
 
     def _super_insert_mutation(column_family, super_column_name, sub_columns, timestamp, ttl = nil)
-      CassandraThrift::Mutation.new(:column_or_supercolumn =>
-        CassandraThrift::ColumnOrSuperColumn.new(
-          :super_column => CassandraThrift::SuperColumn.new(
+      CCassandraThrift::Mutation.new(:column_or_supercolumn =>
+        CCassandraThrift::ColumnOrSuperColumn.new(
+          :super_column => CCassandraThrift::SuperColumn.new(
             :name => column_name_class(column_family).new(super_column_name).to_s,
             :columns => sub_columns.collect { |sub_column_name, sub_column_value|
-              CassandraThrift::Column.new(
+              CCassandraThrift::Column.new(
                 :name      => sub_column_name_class(column_family).new(sub_column_name).to_s,
                 :value     => sub_column_value.to_s,
                 :timestamp => timestamp,
@@ -160,12 +160,12 @@ class Cassandra
       deletion_hash = {:timestamp => timestamp}
       if is_super(cf)
         deletion_hash[:super_column] = column if column
-        deletion_hash[:predicate] = CassandraThrift::SlicePredicate.new(:column_names => [subcolumn]) if subcolumn
+        deletion_hash[:predicate] = CCassandraThrift::SlicePredicate.new(:column_names => [subcolumn]) if subcolumn
       else
-        deletion_hash[:predicate] = CassandraThrift::SlicePredicate.new(:column_names => [column]) if column
+        deletion_hash[:predicate] = CCassandraThrift::SlicePredicate.new(:column_names => [column]) if column
       end
-      CassandraThrift::Mutation.new(
-        :deletion => CassandraThrift::Deletion.new(deletion_hash)
+      CCassandraThrift::Mutation.new(
+        :deletion => CCassandraThrift::Deletion.new(deletion_hash)
       )
     end
   end

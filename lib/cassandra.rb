@@ -8,13 +8,13 @@ require 'json' unless defined?(JSON)
 
 here = File.expand_path(File.dirname(__FILE__))
 
-class Cassandra ; end
-unless Cassandra.respond_to?(:VERSION)
+class CCassandra ; end
+unless CCassandra.respond_to?(:VERSION)
   require "#{here}/cassandra/0.8"
 end
 
-$LOAD_PATH << "#{here}/../vendor/#{Cassandra.VERSION}/gen-rb"
-require "#{here}/../vendor/#{Cassandra.VERSION}/gen-rb/cassandra"
+$LOAD_PATH << "#{here}/../vendor/#{CCassandra.VERSION}/gen-rb"
+require "#{here}/../vendor/#{CCassandra.VERSION}/gen-rb/cassandra"
 
 $LOAD_PATH << "#{here}"
 
@@ -29,11 +29,11 @@ require 'cassandra/ordered_hash'
 require 'cassandra/columns'
 require 'cassandra/protocol'
 require 'cassandra/batch'
-require "cassandra/#{Cassandra.VERSION}/columns"
-require "cassandra/#{Cassandra.VERSION}/protocol"
+require "cassandra/#{CCassandra.VERSION}/columns"
+require "cassandra/#{CCassandra.VERSION}/protocol"
 require "cassandra/cassandra"
-require "cassandra/#{Cassandra.VERSION}/cassandra"
-unless Cassandra.VERSION.eql?("0.6")
+require "cassandra/#{CCassandra.VERSION}/cassandra"
+unless CCassandra.VERSION.eql?("0.6")
   require "cassandra/column_family"
   require "cassandra/keyspace"
 end

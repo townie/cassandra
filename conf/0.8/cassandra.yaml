@@ -1,4 +1,4 @@
-# Cassandra storage config YAML
+# CCassandra storage config YAML
 cluster_name: 'Test'
 initial_token:
 auto_bootstrap: false
@@ -9,7 +9,7 @@ authenticator: org.apache.cassandra.auth.AllowAllAuthenticator
 authority: org.apache.cassandra.auth.AllowAllAuthority
 partitioner: org.apache.cassandra.dht.RandomPartitioner
 
-# directories where Cassandra should store data on disk.
+# directories where CCassandra should store data on disk.
 data_file_directories:
     - data/data
 commitlog_directory: data/commitlog

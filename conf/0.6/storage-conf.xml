@@ -47,11 +47,11 @@
 
   <!--
    ~ Keyspaces and ColumnFamilies:
-   ~ A ColumnFamily is the Cassandra concept closest to a relational
+   ~ A ColumnFamily is the CCassandra concept closest to a relational
    ~ table.  Keyspaces are separate groups of ColumnFamilies.  Except in
    ~ very unusual circumstances you will have one Keyspace per application.
 
-   ~ There is an implicit keyspace named 'system' for Cassandra internals.
+   ~ There is an implicit keyspace named 'system' for CCassandra internals.
   -->
   <Keyspaces>
     <Keyspace Name="Twitter">
@@ -101,7 +101,7 @@
       <EndPointSnitch>org.apache.cassandra.locator.EndPointSnitch</EndPointSnitch>
     </Keyspace>
 
-    <Keyspace Name="CassandraObject">
+    <Keyspace Name="CCassandraObject">
       <KeysCachedFraction>0.01</KeysCachedFraction>
       <ColumnFamily CompareWith="UTF8Type" Name="Customers" />
       <ColumnFamily CompareWith="UTF8Type" CompareSubcolumnsWith="TimeUUIDType" ColumnType="Super" Name="CustomerRelationships" />
@@ -121,7 +121,7 @@
 
   <!--
    ~ Authenticator: any IAuthenticator may be used, including your own as long
-   ~ as it is on the classpath.  Out of the box, Cassandra provides
+   ~ as it is on the classpath.  Out of the box, CCassandra provides
    ~ org.apache.cassandra.auth.AllowAllAuthenticator and,
    ~ org.apache.cassandra.auth.SimpleAuthenticator
    ~ (SimpleAuthenticator uses access.properties and passwd.properties by
@@ -133,7 +133,7 @@
 
   <!--
    ~ Partitioner: any IPartitioner may be used, including your own as long
-   ~ as it is on the classpath.  Out of the box, Cassandra provides
+   ~ as it is on the classpath.  Out of the box, CCassandra provides
    ~ org.apache.cassandra.dht.RandomPartitioner,
    ~ org.apache.cassandra.dht.OrderPreservingPartitioner, and
    ~ org.apache.cassandra.dht.CollatingOrderPreservingPartitioner.
@@ -162,7 +162,7 @@
   <InitialToken></InitialToken>
 
   <!--
-   ~ Directories: Specify where Cassandra should store different data on
+   ~ Directories: Specify where CCassandra should store different data on
    ~ disk.  Keep the data disks and the CommitLog disks separate for best
    ~ performance
   -->
@@ -176,7 +176,7 @@
 
 
   <!--
-   ~ Addresses of hosts that are deemed contact points. Cassandra nodes
+   ~ Addresses of hosts that are deemed contact points. CCassandra nodes
    ~ use this list of hosts to find each other and learn the topology of
    ~ the ring. You must change this if you are running multiple nodes!
   -->
@@ -264,7 +264,7 @@
   <!--
    ~ Add column indexes to a row after its contents reach this size.
    ~ Increase if your column values are large, or if you have a very large
-   ~ number of columns.  The competing causes are, Cassandra has to
+   ~ number of columns.  The competing causes are, CCassandra has to
    ~ deserialize this much of the row to read a single column, so you want
    ~ it to be small - at least if you do many partial-row reads - but all
    ~ the index data is read for each access, so you don't want to generate
@@ -303,7 +303,7 @@
   <MemtableFlushAfterMinutes>60</MemtableFlushAfterMinutes>
 
   <!--
-   ~ Unlike most systems, in Cassandra writes are faster than reads, so
+   ~ Unlike most systems, in CCassandra writes are faster than reads, so
    ~ you can afford more of those in parallel.  A good rule of thumb is 2
    ~ concurrent reads per processor core.  Increase ConcurrentWrites to
    ~ the number of clients writing at once if you enable CommitLogSync +
@@ -313,11 +313,11 @@
 
   <!--
    ~ CommitLogSync may be either "periodic" or "batch."  When in batch
-   ~ mode, Cassandra won't ack writes until the commit log has been
+   ~ mode, CCassandra won't ack writes until the commit log has been
    ~ fsynced to disk.  It will wait up to CommitLogSyncBatchWindowInMS
    ~ milliseconds for other writes, before performing the sync.
 
-   ~ This is less necessary in Cassandra than in traditional databases
+   ~ This is less necessary in CCassandra than in traditional databases
    ~ since replication reduces the odds of losing data from a failure
    ~ after writing the log entry but before it actually reaches the disk.
    ~ So the other option is "timed," where writes may be acked immediately

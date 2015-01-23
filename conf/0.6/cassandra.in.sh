@@ -14,10 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# The directory where Cassandra's configs live (required)
+# The directory where CCassandra's configs live (required)
 CASSANDRA_CONF=$CASSANDRA_CONF
 
-# This can be the path to a jar file, or a directory containing the 
+# This can be the path to a jar file, or a directory containing the
 # compiled classes. NOTE: This isn't needed by the startup script,
 # it's just used here in constructing the classpath.
 cassandra_bin=$CASSANDRA_HOME/build/classes

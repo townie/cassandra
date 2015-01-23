@@ -1,7 +1,7 @@
 
 require 'pp'
 
-class CassandraThrift::Cassandra::Client
+class CCassandraThrift::CCassandra::Client
   def send_message(*args)
     pp args
     super

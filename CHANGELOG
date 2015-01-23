@@ -16,7 +16,7 @@ v0.19.0
 - Native support for dynamic composite decoding (issue #184, courtesy @muirmanders)
 
 v0.18.0
-- Cassandra 1.2 support (issue #175, courtesy @brainopia)
+- CCassandra 1.2 support (issue #175, courtesy @brainopia)
 - drop_keyspace defaults to current keyspace (issue #176, courtesy @brianopia)
 - Easier flush_batch interface (issue #182, courtesy @brianopia)
 - Support for removing multiple columns (issue #183, courtesy @brianopia)
@@ -27,7 +27,7 @@ v0.17.0
 
 v0.16.0
 - New :queue_size option for batch mode (courtesy @vicentllongo)
-- Cassandra 1.1 support (courtesy @hawknewton)
+- CCassandra 1.1 support (courtesy @hawknewton)
 
 v0.15.0
 - Fixes for ruby 1.8 (issue #158, courtesy @jarib)
@@ -36,7 +36,7 @@ v0.15.0
 v0.14.0
 - Numerous performance improvements (courtesy @nearbuy)
 - Fixed many 0.6 bugs
-- Added batch counter update support to Cassandra::Mock
+- Added batch counter update support to CCassandra::Mock
 - Add support DynamicComposite columns (issue #154, courtesy @nearbuy)
 - API cleanup in get_indexed_slices (issue #155, courtesy @mcmire)
 
@@ -51,7 +51,7 @@ v0.13.0
 v0.12.2
 - Respect the start_key in get_range. Resolves Issue #127.
 - Fix issue with differences in gemspec and what is required. Resolves Issue #125.
-- Update to Cassandra 0.8.7 and 1.0.2.
+- Update to CCassandra 0.8.7 and 1.0.2.
 
 v0.12.1
 - Fix issue with simple_uuid dependency.
@@ -70,7 +70,7 @@ v0.11.2
 - Update thrift_client gem to deal with failover bug.
 
 v0.11.1
-- Add counter support for Cassandra 0.8. (Thanks Swrve team!)
+- Add counter support for CCassandra 0.8. (Thanks Swrve team!)
 - Add additional rake tasks to start and stop cassandra in the background.
 - Fix issue with non-utf8 column names not being encoded/decoded properly.
 - Add way to specify a default read/write consistency.
@@ -95,7 +95,7 @@ v0.10.0 Major Update (rjackson)
 - All tests pass for all supported (0.6.13, 0.7.4, 0.8.0-beta1) versions.
 - Added Support for 0.8-beta1
 - Changed get_index_slices to return a hash of rows
-- Updated Cassandra::Mock to pass all tests for each Cassandra version
+- Updated CCassandra::Mock to pass all tests for each CCassandra version
 
 v0.9.2 fix bug with deletions in batch mutations
 
@@ -109,7 +109,7 @@ v0.8.2 Renamed :thrift_client_class option, UUID fix, 0.6 update, fixing cassand
 
 v0.8.1 Adding the ability to compose ThriftClient classes.
 
-v0.8.0 Compatibility with Cassandra 0.6 betas (no longer compatible with 0.5); assorted bugfixes.
+v0.8.0 Compatibility with CCassandra 0.6 betas (no longer compatible with 0.5); assorted bugfixes.
 
 v0.7.6 Bugfixes.
 
@@ -117,14 +117,14 @@ v0.7.5 Another packaging error.
 
 v0.7.4 Fix thrift_client dependency
 
-v0.7.3 New Cassandra::Mock - a pure ruby mock of cassanra; bugfixes.
+v0.7.3 New CCassandra::Mock - a pure ruby mock of cassanra; bugfixes.
 
 v0.7.2 Switch to newly-extraced simple_uuid gem, minor bugfixes.
 
 v0.7.1 update thrift-generated code to 0.5
 
 v0.7 Various improvements.
-- Compatibility with Cassandra 0.5.
+- Compatibility with CCassandra 0.5.
 - performance improvements
 
 v0.6. Use thrift_client gem.
@@ -145,7 +145,7 @@ v0.5.1. Add bin/cassandra_helper script, to build and start the server for you. 
 
 v0.5. More API changes. Working temporal comparators.
 
-v0.4. Use new comparator API. Namespace Thrift bindings; rename gem and class to Cassandra. Make tokens and limits actually work. Retry UnavailableExceptions.
+v0.4. Use new comparator API. Namespace Thrift bindings; rename gem and class to CCassandra. Make tokens and limits actually work. Retry UnavailableExceptions.
 
 v0.3. Use new Thrift API.
 

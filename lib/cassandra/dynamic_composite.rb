@@ -1,4 +1,4 @@
-class Cassandra
+class CCassandra
   class DynamicComposite < Composite
     attr_accessor :types
 

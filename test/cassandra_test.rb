@@ -1,41 +1,41 @@
 require File.expand_path(File.dirname(__FILE__) + '/test_helper')
 
-class CassandraTest < Test::Unit::TestCase
-  include Cassandra::Constants
+class CCassandraTest < Test::Unit::TestCase
+  include CCassandra::Constants
 
   def assert_has_keys(keys, hash)
     assert_equal Set.new(keys), Set.new(hash.keys)
   end
 
   def setup
-    @twitter = Cassandra.new('Twitter', "127.0.0.1:9160", :retries => 2, :connect_timeout => 1, :timeout => 5, :exception_classes => [])
+    @twitter = CCassandra.new('Twitter', "127.0.0.1:9160", :retries => 2, :connect_timeout => 1, :timeout => 5, :exception_classes => [])
     @twitter.clear_keyspace!
 
-    @blogs = Cassandra.new('Multiblog', "127.0.0.1:9160", :retries => 2, :connect_timeout => 1, :timeout => 5, :exception_classes => [])
+    @blogs = CCassandra.new('Multiblog', "127.0.0.1:9160", :retries => 2, :connect_timeout => 1, :timeout => 5, :exception_classes => [])
     @blogs.clear_keyspace!
 
-    @blogs_long = Cassandra.new('MultiblogLong', "127.0.0.1:9160", :retries => 2, :connect_timeout => 1, :timeout => 5, :exception_classes => [])
+    @blogs_long = CCassandra.new('MultiblogLong', "127.0.0.1:9160", :retries => 2, :connect_timeout => 1, :timeout => 5, :exception_classes => [])
     @blogs_long.clear_keyspace!
 
-    @type_conversions = Cassandra.new('TypeConversions', "127.0.0.1:9160", :retries => 2, :connect_timeout => 1, :timeout => 5, :exception_classes => [])
+    @type_conversions = CCassandra.new('TypeConversions', "127.0.0.1:9160", :retries => 2, :connect_timeout => 1, :timeout => 5, :exception_classes => [])
     @type_conversions.clear_keyspace!
 
-    Cassandra::WRITE_DEFAULTS[:consistency] = Cassandra::Consistency::ONE
-    Cassandra::READ_DEFAULTS[:consistency]  = Cassandra::Consistency::ONE
+    CCassandra::WRITE_DEFAULTS[:consistency] = CCassandra::Consistency::ONE
+    CCassandra::READ_DEFAULTS[:consistency]  = CCassandra::Consistency::ONE
 
     @uuids = (0..6).map {|i| SimpleUUID::UUID.new(Time.at(2**(24+i))) }
     @longs = (0..6).map {|i| Long.new(Time.at(2**(24+i))) }
     @composites = [
-      Cassandra::Composite.new([5].pack('N'), "zebra"),
-      Cassandra::Composite.new([5].pack('N'), "aardvark"),
-      Cassandra::Composite.new([1].pack('N'), "elephant"),
-      Cassandra::Composite.new([10].pack('N'), "kangaroo"),
+      CCassandra::Composite.new([5].pack('N'), "zebra"),
+      CCassandra::Composite.new([5].pack('N'), "aardvark"),
+      CCassandra::Composite.new([1].pack('N'), "elephant"),
+      CCassandra::Composite.new([10].pack('N'), "kangaroo"),
     ]
     @dynamic_composites = [
-      Cassandra::DynamicComposite.new(['i', [5].pack('N')], ['UTF8Type', "zebra"]),
-      Cassandra::DynamicComposite.new(['i', [5].pack('N')], ['UTF8Type', "aardvark"]),
-      Cassandra::DynamicComposite.new(['IntegerType', [1].pack('N')], ['s', "elephant"]),
-      Cassandra::DynamicComposite.new(['IntegerType', [10].pack('N')], ['s', "kangaroo"]),
+      CCassandra::DynamicComposite.new(['i', [5].pack('N')], ['UTF8Type', "zebra"]),
+      CCassandra::DynamicComposite.new(['i', [5].pack('N')], ['UTF8Type', "aardvark"]),
+      CCassandra::DynamicComposite.new(['IntegerType', [1].pack('N')], ['s', "elephant"]),
+      CCassandra::DynamicComposite.new(['IntegerType', [10].pack('N')], ['s', "kangaroo"]),
     ]
   end
 
@@ -48,14 +48,14 @@ class CassandraTest < Test::Unit::TestCase
 
   def test_setting_default_consistency
     assert_nothing_raised do
-      @twitter.default_read_consistency = Cassandra::Consistency::ALL
+      @twitter.default_read_consistency = CCassandra::Consistency::ALL
     end
-    assert_equal(Cassandra::READ_DEFAULTS[:consistency], Cassandra::Consistency::ALL)
+    assert_equal(CCassandra::READ_DEFAULTS[:consistency], CCassandra::Consistency::ALL)
 
     assert_nothing_raised do
-      @twitter.default_write_consistency = Cassandra::Consistency::ALL
+      @twitter.default_write_consistency = CCassandra::Consistency::ALL
     end
-    assert_equal(Cassandra::WRITE_DEFAULTS[:consistency], Cassandra::Consistency::ALL)
+    assert_equal(CCassandra::WRITE_DEFAULTS[:consistency], CCassandra::Consistency::ALL)
   end
 
   def test_get_key
@@ -322,8 +322,8 @@ class CassandraTest < Test::Unit::TestCase
 
   def test_get_range_reversed
     data = 3.times.map { |i| ["body-#{i.to_s}", "v"] }
-    hash = Cassandra::OrderedHash[data]
-    reversed_hash = Cassandra::OrderedHash[data.reverse]
+    hash = CCassandra::OrderedHash[data]
+    reversed_hash = CCassandra::OrderedHash[data.reverse]
 
     @twitter.insert(:Statuses, "all-keys", hash)
 
@@ -718,7 +718,7 @@ class CassandraTest < Test::Unit::TestCase
 
   def test_disconnect_when_not_connected!
     assert_nothing_raised do
-      @twitter = Cassandra.new('Twitter', "127.0.0.1:9160", :retries => 2, :exception_classes => [])
+      @twitter = CCassandra.new('Twitter', "127.0.0.1:9160", :retries => 2, :exception_classes => [])
       @twitter.disconnect!
     end
   end
@@ -860,7 +860,7 @@ class CassandraTest < Test::Unit::TestCase
       assert_has_keys %w[row_c_1 row_c_2 row_c_3 row_c_4], rows
 
       # Test other operators
-      # Currently (as of Cassandra 1.1) you can't use anything but == as the
+      # Currently (as of CCassandra 1.1) you can't use anything but == as the
       # primary query -- you must match on == first, and subsequent clauses are
       # then applied as filters -- so that's what we are doing here.
 
@@ -909,8 +909,8 @@ class CassandraTest < Test::Unit::TestCase
       assert_has_keys %w[row_c_1 row_c_2 row_c_3 row_c_4], rows
 
       # Test query on a non-indexed column
-      unless self.is_a?(CassandraMockTest)
-        assert_raises(CassandraThrift::InvalidRequestException) do
+      unless self.is_a?(CCassandraMockTest)
+        assert_raises(CCassandraThrift::InvalidRequestException) do
           @twitter.get_indexed_slices(:Statuses, [
             {:column_name => 'y',
              :value => 'foo',
@@ -985,7 +985,7 @@ class CassandraTest < Test::Unit::TestCase
       assert_has_keys %w[row_c_1 row_c_2 row_c_3 row_c_4], rows
 
       # Test other operators
-      # Currently (as of Cassandra 1.1) you can't use anything but == as the
+      # Currently (as of CCassandra 1.1) you can't use anything but == as the
       # primary query -- you must match on == first, and subsequent clauses are
       # then applied as filters -- so that's what we are doing here.
 
@@ -1022,8 +1022,8 @@ class CassandraTest < Test::Unit::TestCase
       assert_has_keys %w[row_c_1 row_c_2 row_c_3 row_c_4], rows
 
       # Test query on a non-indexed column
-      unless self.is_a?(CassandraMockTest)
-        assert_raises(CassandraThrift::InvalidRequestException) do
+      unless self.is_a?(CCassandraMockTest)
+        assert_raises(CCassandraThrift::InvalidRequestException) do
           index_clause = @twitter.create_index_clause([
             @twitter.create_index_expression('y', 'foo', '==')
           ])
@@ -1049,114 +1049,114 @@ class CassandraTest < Test::Unit::TestCase
     end
 
     def test_create_index_clause
-      return if self.is_a?(CassandraMockTest)
+      return if self.is_a?(CCassandraMockTest)
 
-      ie = CassandraThrift::IndexExpression.new(
+      ie = CCassandraThrift::IndexExpression.new(
         :column_name => 'foo',
         :value => 'x',
         :op => '=='
       )
 
       ic = @twitter.create_index_clause([ie], 'aaa', 250)
-      assert_instance_of CassandraThrift::IndexClause, ic
+      assert_instance_of CCassandraThrift::IndexClause, ic
       assert_equal 'aaa', ic.start_key
       assert_equal ie, ic.expressions[0]
       assert_equal 250, ic.count
 
       # test alias
       ic = @twitter.create_idx_clause([ie], 'aaa', 250)
-      assert_instance_of CassandraThrift::IndexClause, ic
+      assert_instance_of CCassandraThrift::IndexClause, ic
       assert_equal 'aaa', ic.start_key
       assert_equal ie, ic.expressions[0]
       assert_equal 250, ic.count
     end
 
     def test_create_index_expression
-      return if self.is_a?(CassandraMockTest)
+      return if self.is_a?(CCassandraMockTest)
 
       # EQ operator
       [nil, "EQ", "eq", "=="].each do |op|
         ie = @twitter.create_index_expression('foo', 'x', op)
-        assert_instance_of CassandraThrift::IndexExpression, ie
+        assert_instance_of CCassandraThrift::IndexExpression, ie
         assert_equal 'foo', ie.column_name
         assert_equal 'x', ie.value
-        assert_equal CassandraThrift::IndexOperator::EQ, ie.op
+        assert_equal CCassandraThrift::IndexOperator::EQ, ie.op
       end
       # alias
       [nil, "EQ", "eq", "=="].each do |op|
         ie = @twitter.create_idx_expr('foo', 'x', op)
-        assert_instance_of CassandraThrift::IndexExpression, ie
+        assert_instance_of CCassandraThrift::IndexExpression, ie
         assert_equal 'foo', ie.column_name
         assert_equal 'x', ie.value
-        assert_equal CassandraThrift::IndexOperator::EQ, ie.op
+        assert_equal CCassandraThrift::IndexOperator::EQ, ie.op
       end
 
       # GTE operator
       ["GTE", "gte", ">="].each do |op|
         ie = @twitter.create_index_expression('foo', 'x', op)
-        assert_instance_of CassandraThrift::IndexExpression, ie
+        assert_instance_of CCassandraThrift::IndexExpression, ie
         assert_equal 'foo', ie.column_name
         assert_equal 'x', ie.value
-        assert_equal CassandraThrift::IndexOperator::GTE, ie.op
+        assert_equal CCassandraThrift::IndexOperator::GTE, ie.op
       end
       # alias
       ["GTE", "gte", ">="].each do |op|
         ie = @twitter.create_idx_expr('foo', 'x', op)
-        assert_instance_of CassandraThrift::IndexExpression, ie
+        assert_instance_of CCassandraThrift::IndexExpression, ie
         assert_equal 'foo', ie.column_name
         assert_equal 'x', ie.value
-        assert_equal CassandraThrift::IndexOperator::GTE, ie.op
+        assert_equal CCassandraThrift::IndexOperator::GTE, ie.op
       end
 
       # GT operator
       ["GT", "gt", ">"].each do |op|
         ie = @twitter.create_index_expression('foo', 'x', op)
-        assert_instance_of CassandraThrift::IndexExpression, ie
+        assert_instance_of CCassandraThrift::IndexExpression, ie
         assert_equal 'foo', ie.column_name
         assert_equal 'x', ie.value
-        assert_equal CassandraThrift::IndexOperator::GT, ie.op
+        assert_equal CCassandraThrift::IndexOperator::GT, ie.op
       end
       # alias
       ["GT", "gt", ">"].each do |op|
         ie = @twitter.create_idx_expr('foo', 'x', op)
-        assert_instance_of CassandraThrift::IndexExpression, ie
+        assert_instance_of CCassandraThrift::IndexExpression, ie
         assert_equal 'foo', ie.column_name
         assert_equal 'x', ie.value
-        assert_equal CassandraThrift::IndexOperator::GT, ie.op
+        assert_equal CCassandraThrift::IndexOperator::GT, ie.op
       end
 
       # LTE operator
       ["LTE", "lte", "<="].each do |op|
         ie = @twitter.create_index_expression('foo', 'x', op)
-        assert_instance_of CassandraThrift::IndexExpression, ie
+        assert_instance_of CCassandraThrift::IndexExpression, ie
         assert_equal 'foo', ie.column_name
         assert_equal 'x', ie.value
-        assert_equal CassandraThrift::IndexOperator::LTE, ie.op
+        assert_equal CCassandraThrift::IndexOperator::LTE, ie.op
       end
       # alias
       ["LTE", "lte", "<="].each do |op|
         ie = @twitter.create_idx_expr('foo', 'x', op)
-        assert_instance_of CassandraThrift::IndexExpression, ie
+        assert_instance_of CCassandraThrift::IndexExpression, ie
         assert_equal 'foo', ie.column_name
         assert_equal 'x', ie.value
-        assert_equal CassandraThrift::IndexOperator::LTE, ie.op
+        assert_equal CCassandraThrift::IndexOperator::LTE, ie.op
       end
 
       # LT operator
       ["LT", "lt", "<"].each do |op|
         ie = @twitter.create_index_expression('foo', 'x', op)
-        assert_instance_of CassandraThrift::IndexExpression, ie
+        assert_instance_of CCassandraThrift::IndexExpression, ie
         assert_equal 'foo', ie.column_name
         assert_equal 'x', ie.value
-        assert_equal CassandraThrift::IndexOperator::LT, ie.op
+        assert_equal CCassandraThrift::IndexOperator::LT, ie.op
       end
       # alias
       ["LT", "lt", "<"].each do |op|
         ie = @twitter.create_idx_expr('foo', 'x', op)
-        assert_instance_of CassandraThrift::IndexExpression, ie
+        assert_instance_of CCassandraThrift::IndexExpression, ie
         assert_equal 'foo', ie.column_name
         assert_equal 'x', ie.value
-        assert_equal CassandraThrift::IndexOperator::LT, ie.op
+        assert_equal CCassandraThrift::IndexOperator::LT, ie.op
       end
 
       # unknown operator
@@ -1176,7 +1176,7 @@ class CassandraTest < Test::Unit::TestCase
 
       # Verify add_column_family works as desired.
       @twitter.add_column_family(
-        Cassandra::ColumnFamily.new(
+        CCassandra::ColumnFamily.new(
           :keyspace => 'Twitter',
           :name     => k
         )
@@ -1245,40 +1245,40 @@ class CassandraTest < Test::Unit::TestCase
     def test_composite_column_type_conversion
       columns = {}
       @composites.push(
-        Cassandra::Composite.new_from_parts([[20].pack('N'), "meerkat"])
+        CCassandra::Composite.new_from_parts([[20].pack('N'), "meerkat"])
       )
       @composites.each_with_index do |c, index|
         columns[c] = "value-#{index}"
       end
       @type_conversions.insert(:CompositeColumnConversion, key, columns)
       columns_in_order = [
-        Cassandra::Composite.new([1].pack('N'), "elephant"),
-        Cassandra::Composite.new([5].pack('N'), "aardvark"),
-        Cassandra::Composite.new([5].pack('N'), "zebra"),
-        Cassandra::Composite.new([10].pack('N'), "kangaroo"),
-        Cassandra::Composite.new([20].pack('N'), "meerkat"),
+        CCassandra::Composite.new([1].pack('N'), "elephant"),
+        CCassandra::Composite.new([5].pack('N'), "aardvark"),
+        CCassandra::Composite.new([5].pack('N'), "zebra"),
+        CCassandra::Composite.new([10].pack('N'), "kangaroo"),
+        CCassandra::Composite.new([20].pack('N'), "meerkat"),
       ]
       assert_equal(columns_in_order, @type_conversions.get(:CompositeColumnConversion, key).keys)
 
       column_slice = @type_conversions.get(:CompositeColumnConversion, key,
-        :start => Cassandra::Composite.new([1].pack('N')),
-        :finish => Cassandra::Composite.new([20].pack('N'))
+        :start => CCassandra::Composite.new([1].pack('N')),
+        :finish => CCassandra::Composite.new([20].pack('N'))
       ).keys
       assert_equal(columns_in_order[0..-2], column_slice)
 
       column_slice = @type_conversions.get(:CompositeColumnConversion, key,
-        :start => Cassandra::Composite.new([5].pack('N')),
-        :finish => Cassandra::Composite.new([5].pack('N'), :slice => :after)
+        :start => CCassandra::Composite.new([5].pack('N')),
+        :finish => CCassandra::Composite.new([5].pack('N'), :slice => :after)
       ).keys
       assert_equal(columns_in_order[1..2], column_slice)
 
       column_slice = @type_conversions.get(:CompositeColumnConversion, key,
-        :start => Cassandra::Composite.new([5].pack('N'), :slice => :after).to_s
+        :start => CCassandra::Composite.new([5].pack('N'), :slice => :after).to_s
       ).keys
       assert_equal(columns_in_order[-2..-1], column_slice)
 
       column_slice = @type_conversions.get(:CompositeColumnConversion, key,
-        :finish => Cassandra::Composite.new([10].pack('N'), :slice => :before).to_s
+        :finish => CCassandra::Composite.new([10].pack('N'), :slice => :before).to_s
       ).keys
       assert_equal(columns_in_order[0..-3], column_slice)
 
@@ -1293,32 +1293,32 @@ class CassandraTest < Test::Unit::TestCase
       @type_conversions.insert(:DynamicComposite, key, columns)
 
       columns_in_order = [
-        Cassandra::DynamicComposite.new(['IntegerType', [1].pack('N')], ['s', "elephant"]),
-        Cassandra::DynamicComposite.new(['i', [5].pack('N')], ['UTF8Type', "aardvark"]),
-        Cassandra::DynamicComposite.new(['i', [5].pack('N')], ['UTF8Type', "zebra"]),
-        Cassandra::DynamicComposite.new(['IntegerType', [10].pack('N')], ['s', "kangaroo"]),
+        CCassandra::DynamicComposite.new(['IntegerType', [1].pack('N')], ['s', "elephant"]),
+        CCassandra::DynamicComposite.new(['i', [5].pack('N')], ['UTF8Type', "aardvark"]),
+        CCassandra::DynamicComposite.new(['i', [5].pack('N')], ['UTF8Type', "zebra"]),
+        CCassandra::DynamicComposite.new(['IntegerType', [10].pack('N')], ['s', "kangaroo"]),
       ]
       assert_equal(columns_in_order, @type_conversions.get(:DynamicComposite, key).keys)
 
       column_slice = @type_conversions.get(:DynamicComposite, key,
-        :start => Cassandra::DynamicComposite.new(['i', [1].pack('N')]),
-        :finish => Cassandra::DynamicComposite.new(['i', [10].pack('N')])
+        :start => CCassandra::DynamicComposite.new(['i', [1].pack('N')]),
+        :finish => CCassandra::DynamicComposite.new(['i', [10].pack('N')])
       ).keys
       assert_equal(columns_in_order[0..-2], column_slice)
 
       column_slice = @type_conversions.get(:DynamicComposite, key,
-        :start => Cassandra::DynamicComposite.new(['IntegerType', [5].pack('N')]),
-        :finish => Cassandra::DynamicComposite.new(['IntegerType', [5].pack('N')], :slice => :after)
+        :start => CCassandra::DynamicComposite.new(['IntegerType', [5].pack('N')]),
+        :finish => CCassandra::DynamicComposite.new(['IntegerType', [5].pack('N')], :slice => :after)
       ).keys
       assert_equal(columns_in_order[1..2], column_slice)
 
       column_slice = @type_conversions.get(:DynamicComposite, key,
-        :start => Cassandra::DynamicComposite.new(['i', [5].pack('N')], :slice => :after).to_s
+        :start => CCassandra::DynamicComposite.new(['i', [5].pack('N')], :slice => :after).to_s
       ).keys
       assert_equal([columns_in_order[-1]], column_slice)
 
       column_slice = @type_conversions.get(:DynamicComposite, key,
-        :finish => Cassandra::DynamicComposite.new(['i', [10].pack('N')], :slice => :before).to_s
+        :finish => CCassandra::DynamicComposite.new(['i', [10].pack('N')], :slice => :before).to_s
       ).keys
       assert_equal(columns_in_order[0..-2], column_slice)
 
@@ -1346,9 +1346,9 @@ class CassandraTest < Test::Unit::TestCase
   end
 
   def test_keyspace_operations
-    system = Cassandra.new 'system'
+    system = CCassandra.new 'system'
     keyspace_name = 'robots'
-    keyspace_definition = Cassandra::Keyspace.new :name => keyspace_name,
+    keyspace_definition = CCassandra::Keyspace.new :name => keyspace_name,
       :strategy_class => 'SimpleStrategy',
       :strategy_options => { 'replication_factor' => '2' },
       :cf_defs => []
@@ -1359,7 +1359,7 @@ class CassandraTest < Test::Unit::TestCase
     assert system.keyspaces.none? {|it| it == keyspace_name }
 
     system.add_keyspace keyspace_definition
-    Cassandra.new(keyspace_name).drop_keyspace
+    CCassandra.new(keyspace_name).drop_keyspace
     assert system.keyspaces.none? {|it| it == keyspace_name }
   end
 

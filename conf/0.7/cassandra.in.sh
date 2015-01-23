@@ -18,7 +18,7 @@ if [ "x$CASSANDRA_HOME" = "x" ]; then
   CASSANDRA_HOME=`dirname $0`/..
 fi
 
-# The directory where Cassandra's configs live (required)
+# The directory where CCassandra's configs live (required)
 if [ "x$CASSANDRA_CONF" = "x" ]; then
   CASSANDRA_CONF=$CASSANDRA_HOME/conf
 fi

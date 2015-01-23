@@ -1,7 +1,7 @@
 =begin rdoc
-Create a new Cassandra client instance. Accepts a keyspace name, and optional host and port.
+Create a new CCassandra client instance. Accepts a keyspace name, and optional host and port.
 
-  client = Cassandra.new('twitter', '127.0.0.1:9160')
+  client = CCassandra.new('twitter', '127.0.0.1:9160')
 
 If the server requires authentication, you must authenticate before make calls
 
@@ -18,7 +18,7 @@ For read methods, valid option parameters are:
 <tt>:start</tt>:: Column name token at which to start iterating, inclusive. Defaults to nil, which means the first column in the collation order.
 <tt>:finish</tt>:: Column name token at which to stop iterating, inclusive. Defaults to nil, which means no boundary.
 <tt>:reversed</tt>:: Swap the direction of the collation order.
-<tt>:consistency</tt>:: The consistency level of the request. Defaults to <tt>Cassandra::Consistency::ONE</tt> (one node must respond). Other valid options are <tt>Cassandra::Consistency::ZERO</tt>, <tt>Cassandra::Consistency::QUORUM</tt>, and <tt>Cassandra::Consistency::ALL</tt>.
+<tt>:consistency</tt>:: The consistency level of the request. Defaults to <tt>CCassandra::Consistency::ONE</tt> (one node must respond). Other valid options are <tt>CCassandra::Consistency::ZERO</tt>, <tt>CCassandra::Consistency::QUORUM</tt>, and <tt>CCassandra::Consistency::ALL</tt>.
 
 Note that some read options have no relevance in some contexts.
 
@@ -31,7 +31,7 @@ For the initial client instantiation, you may also pass in <tt>:thrift_client<tt
 
 =end
 
-class Cassandra
+class CCassandra
   include Columns
   include Protocol
   include Helpers
@@ -40,7 +40,7 @@ class Cassandra
   end
 
   module Consistency
-    include CassandraThrift::ConsistencyLevel
+    include CCassandraThrift::ConsistencyLevel
   end
 
   WRITE_DEFAULTS = {
@@ -71,7 +71,7 @@ class Cassandra
     Thrift::FramedTransport
   end
 
-  # Create a new Cassandra instance and open the connection.
+  # Create a new CCassandra instance and open the connection.
   def initialize(keyspace, servers = "127.0.0.1:9160", thrift_client_options = {})
     @is_super = {}
     @column_name_class = {}
@@ -79,7 +79,7 @@ class Cassandra
     @column_name_maker = {}
     @sub_column_name_maker = {}
     @auto_discover_nodes = true
-    thrift_client_options[:transport_wrapper] ||= Cassandra.DEFAULT_TRANSPORT_WRAPPER
+    thrift_client_options[:transport_wrapper] ||= CCassandra.DEFAULT_TRANSPORT_WRAPPER
     @thrift_client_options = THRIFT_DEFAULTS.merge(thrift_client_options)
     @thrift_client_class = @thrift_client_options[:thrift_client_class]
     @keyspace = keyspace
@@ -119,7 +119,7 @@ class Cassandra
   # * password
   #
   def login!(username, password)
-    request = CassandraThrift::AuthenticationRequest.new
+    request = CCassandraThrift::AuthenticationRequest.new
     request.credentials = {'username' => username, 'password' => password}
     ret = client.login(request)
 
@@ -131,7 +131,7 @@ class Cassandra
   end
 
   def inspect
-    "#<Cassandra:#{object_id}, @keyspace=#{keyspace.inspect}, @schema={#{
+    "#<CCassandra:#{object_id}, @keyspace=#{keyspace.inspect}, @schema={#{
       Array(schema(false).cf_defs).map {|cfdef| ":#{cfdef.name} => #{cfdef.column_type}"}.join(', ')
     }}, @servers=#{servers.inspect}>"
   end
@@ -141,7 +141,7 @@ class Cassandra
   #
   # Please note that this only works on version 0.7.0 and higher.
   def keyspace=(ks)
-    return false if Cassandra.VERSION.to_f < 0.7
+    return false if CCassandra.VERSION.to_f < 0.7
 
     client.set_keyspace(ks)
     @schema = nil; @keyspace = ks
@@ -152,7 +152,7 @@ class Cassandra
   #
   # Please note that this only works on version 0.7.0 and higher.
   def keyspaces
-    return false if Cassandra.VERSION.to_f < 0.7
+    return false if CCassandra.VERSION.to_f < 0.7
 
     client.describe_keyspaces.to_a.collect {|ksdef| ksdef.name }
   end
@@ -161,21 +161,21 @@ class Cassandra
   # Return a hash of column_family definitions indexed by their
   # names
   def column_families
-    return false if Cassandra.VERSION.to_f < 0.7
+    return false if CCassandra.VERSION.to_f < 0.7
 
     schema.cf_defs.inject(Hash.new){|memo, cf_def| memo[cf_def.name] = cf_def; memo;}
   end
 
   ##
-  # Return a Cassandra::Keyspace object loaded with the current
+  # Return a CCassandra::Keyspace object loaded with the current
   # keyspaces schema.
   #
   # Please note that this only works on version 0.7.0 and higher.
   def schema(load=true)
-    return false if Cassandra.VERSION.to_f < 0.7
+    return false if CCassandra.VERSION.to_f < 0.7
 
     if !load && !@schema
-      Cassandra::Keyspace.new
+      CCassandra::Keyspace.new
     else
       @schema ||= client.describe_keyspace(@keyspace)
     end
@@ -186,7 +186,7 @@ class Cassandra
   #
   # Please note that this only works on version 0.7.0 and higher.
   def schema_agreement?
-    return false if Cassandra.VERSION.to_f < 0.7
+    return false if CCassandra.VERSION.to_f < 0.7
 
     client.describe_schema_versions().length == 1
   end
@@ -196,7 +196,7 @@ class Cassandra
   #
   # Please note that this only works on version 0.7.0 and higher.
   def version
-    return false if Cassandra.VERSION.to_f < 0.7
+    return false if CCassandra.VERSION.to_f < 0.7
 
     client.describe_version()
   end
@@ -206,19 +206,19 @@ class Cassandra
   #
   # Please note that this only works on version 0.7.0 and higher.
   def cluster_name
-    return false if Cassandra.VERSION.to_f < 0.7
+    return false if CCassandra.VERSION.to_f < 0.7
 
     @cluster_name ||= client.describe_cluster_name()
   end
 
   ##
-  # Returns an array of CassandraThrift::TokenRange objects indicating
+  # Returns an array of CCassandraThrift::TokenRange objects indicating
   # which servers make up the current ring. What their start and end
   # tokens are, and their list of endpoints.
   #
   # Please note that this only works on version 0.7.0 and higher.
   def ring
-    return false if Cassandra.VERSION.to_f < 0.7
+    return false if CCassandra.VERSION.to_f < 0.7
 
     client.describe_ring(@keyspace)
   end
@@ -230,7 +230,7 @@ class Cassandra
   #
   # Please note that this only works on version 0.7.0 and higher.
   def partitioner
-    return false if Cassandra.VERSION.to_f < 0.7
+    return false if CCassandra.VERSION.to_f < 0.7
 
     client.describe_partitioner()
   end
@@ -251,23 +251,23 @@ class Cassandra
   ##
   # Remove all column families in the keyspace.
   #
-  # This method calls Cassandra#truncate! for each column family in the
+  # This method calls CCassandra#truncate! for each column family in the
   # keyspace.
   #
   # Please note that this only works on version 0.7.0 and higher.
   #
   def clear_keyspace!
-    return false if Cassandra.VERSION.to_f < 0.7
+    return false if CCassandra.VERSION.to_f < 0.7
 
     schema.cf_defs.each { |cfdef| truncate!(cfdef.name) }
   end
 
   ##
   # Creates a new column family from the passed in
-  # Cassandra::ColumnFamily instance, and returns the schema id.
+  # CCassandra::ColumnFamily instance, and returns the schema id.
   #
   def add_column_family(cf_def)
-    return false if Cassandra.VERSION.to_f < 0.7
+    return false if CCassandra.VERSION.to_f < 0.7
 
     @schema = nil
     return client.system_add_column_family(cf_def)
@@ -279,7 +279,7 @@ class Cassandra
   # * column_family - The column_family name to drop.
   #
   def drop_column_family(column_family)
-    return false if Cassandra.VERSION.to_f < 0.7
+    return false if CCassandra.VERSION.to_f < 0.7
 
     @schema = nil
     return client.system_drop_column_family(column_family)
@@ -292,7 +292,7 @@ class Cassandra
   # * new_name - The desired column_family name.
   #
   def rename_column_family(old_name, new_name)
-    return false if Cassandra.VERSION.to_f != 0.7
+    return false if CCassandra.VERSION.to_f != 0.7
 
     @schema = nil
     return client.system_rename_column_family(old_name, new_name)
@@ -302,7 +302,7 @@ class Cassandra
   # Update the column family based on the passed in definition.
   #
   def update_column_family(cf_def)
-    return false if Cassandra.VERSION.to_f < 0.7
+    return false if CCassandra.VERSION.to_f < 0.7
 
     @schema = nil
     return client.system_update_column_family(cf_def)
@@ -314,7 +314,7 @@ class Cassandra
   # Returns the new schema id.
   #
   def add_keyspace(ks_def)
-    return false if Cassandra.VERSION.to_f < 0.7
+    return false if CCassandra.VERSION.to_f < 0.7
 
     @keyspaces = nil
     return client.system_add_keyspace(ks_def)
@@ -326,7 +326,7 @@ class Cassandra
   # Returns the new schema id.
   #
   def drop_keyspace(keyspace=@keyspace)
-    return false if Cassandra.VERSION.to_f < 0.7
+    return false if CCassandra.VERSION.to_f < 0.7
 
     @keyspaces = nil
     ret = client.system_drop_keyspace(keyspace)
@@ -342,7 +342,7 @@ class Cassandra
   #
   # Returns the new schema id
   def rename_keyspace(old_name, new_name)
-    return false if Cassandra.VERSION.to_f < 0.7
+    return false if CCassandra.VERSION.to_f < 0.7
 
     @keyspaces = nil
     ret = client.system_rename_keyspace(old_name, new_name)
@@ -354,7 +354,7 @@ class Cassandra
   # Update the keyspace using the passed in keyspace definition.
   #
   def update_keyspace(ks_def)
-    return false if Cassandra.VERSION.to_f < 0.7
+    return false if CCassandra.VERSION.to_f < 0.7
 
     @keyspaces = nil
     return client.system_update_keyspace(ks_def)
@@ -481,10 +481,10 @@ class Cassandra
   end
 
   ##
-  # Multi-key version of Cassandra#count_columns. Please note that this
+  # Multi-key version of CCassandra#count_columns. Please note that this
   # queries the server for each key passed in.
   #
-  # Supports same parameters as Cassandra#count_columns.
+  # Supports same parameters as CCassandra#count_columns.
   #
   # * column_family - The column_family that you are inserting into.
   # * keys - An array of keys to select.
@@ -515,10 +515,10 @@ class Cassandra
   end
 
   ##
-  # Multi-key version of Cassandra#get_columns. Please note that this
+  # Multi-key version of CCassandra#get_columns. Please note that this
   # queries the server for each key passed in.
   #
-  # Supports same parameters as Cassandra#get_columns
+  # Supports same parameters as CCassandra#get_columns
   #
   # * column_family - The column_family that you are inserting into.
   # * keys - An array of keys to select.
@@ -534,7 +534,7 @@ class Cassandra
   end
 
   ##
-  # Return a hash (actually, a Cassandra::OrderedHash) or a single value
+  # Return a hash (actually, a CCassandra::OrderedHash) or a single value
   # representing the element at the column_family:key:[column]:[sub_column]
   # path you request.
   #
@@ -555,13 +555,13 @@ class Cassandra
   end
 
   ##
-  # Multi-key version of Cassandra#get.
+  # Multi-key version of CCassandra#get.
   #
   # This method allows you to select multiple rows with a single query.
   # If a key that is passed in doesn't exist an empty hash will be
   # returned.
   #
-  # Supports the same parameters as Cassandra#get.
+  # Supports the same parameters as CCassandra#get.
   #
   # * column_family   - The column_family that you are inserting into.
   # * keys            - An array of keys to select.
@@ -616,16 +616,16 @@ class Cassandra
   end
 
   ##
-  # Return an Cassandra::OrderedHash containing the columns specified for the given
+  # Return an CCassandra::OrderedHash containing the columns specified for the given
   # range of keys in the column_family you request.
   #
-  # This method is just a convenience wrapper around Cassandra#get_range_single
-  # and Cassandra#get_range_batch. If :key_size, :batch_size, or a block
-  # is passed in Cassandra#get_range_batch will be called. Otherwise
-  # Cassandra#get_range_single will be used.
+  # This method is just a convenience wrapper around CCassandra#get_range_single
+  # and CCassandra#get_range_batch. If :key_size, :batch_size, or a block
+  # is passed in CCassandra#get_range_batch will be called. Otherwise
+  # CCassandra#get_range_single will be used.
   #
   # The start_key and finish_key parameters are only useful for iterating of all records
-  # as is done in the Cassandra#each and Cassandra#each_key methods if you are using the
+  # as is done in the CCassandra#each and CCassandra#each_key methods if you are using the
   # RandomPartitioner.
   #
   # If the table is partitioned with OrderPreservingPartitioner you may
@@ -635,7 +635,7 @@ class Cassandra
   # If a block is passed in we will yield the row key and columns for
   # each record returned.
   #
-  # Please note that Cassandra returns a row for each row that has existed in the
+  # Please note that CCassandra returns a row for each row that has existed in the
   # system since gc_grace_seconds. This is because deleted row keys are marked as
   # deleted, but left in the system until the cluster has had resonable time to replicate the deletion.
   # This function attempts to suppress deleted rows (actually any row returned without
@@ -666,10 +666,10 @@ class Cassandra
   end
 
   ##
-  # Return an Cassandra::OrderedHash containing the columns specified for the given
+  # Return an CCassandra::OrderedHash containing the columns specified for the given
   # range of keys in the column_family you request.
   #
-  # See Cassandra#get_range for more details.
+  # See CCassandra#get_range for more details.
   #
   def get_range_single(column_family, options = {})
     return_empty_rows = options.delete(:return_empty_rows) || false
@@ -699,13 +699,13 @@ class Cassandra
   end
 
   ##
-  # Return an Cassandra::OrderedHash containing the columns specified for the given
+  # Return an CCassandra::OrderedHash containing the columns specified for the given
   # range of keys in the column_family you request.
   #
   # If a block is passed in we will yield the row key and columns for
-  # each record returned and return a nil value instead of a Cassandra::OrderedHash.
+  # each record returned and return a nil value instead of a CCassandra::OrderedHash.
   #
-  # See Cassandra#get_range for more details.
+  # See CCassandra#get_range for more details.
   #
   def get_range_batch(column_family, options = {})
     batch_size    = options.delete(:batch_size) || 100
@@ -746,10 +746,10 @@ class Cassandra
   ##
   # Count all rows in the column_family you request.
   #
-  # This method just calls Cassandra#get_range_keys and returns the
+  # This method just calls CCassandra#get_range_keys and returns the
   # number of records returned.
   #
-  # See Cassandra#get_range for options.
+  # See CCassandra#get_range for options.
   #
   def count_range(column_family, options = {})
     get_range_keys(column_family, options).length
@@ -758,10 +758,10 @@ class Cassandra
   ##
   # Return an Array containing all of the keys within a given range.
   #
-  # This method just calls Cassandra#get_range and returns the
+  # This method just calls CCassandra#get_range and returns the
   # row keys for the records returned.
   #
-  # See Cassandra#get_range for options.
+  # See CCassandra#get_range for options.
   #
   def get_range_keys(column_family, options = {})
     get_range(column_family,options.merge!(:count => 1)).keys
@@ -771,9 +771,9 @@ class Cassandra
   # Iterate through each key within the given parameters. This function can be
   # used to iterate over each key in the given column family.
   #
-  # This method just calls Cassandra#get_range and yields each row key.
+  # This method just calls CCassandra#get_range and yields each row key.
   #
-  # See Cassandra#get_range for options.
+  # See CCassandra#get_range for options.
   #
   def each_key(column_family, options = {})
     get_range_batch(column_family, options) do |key, columns|
@@ -784,10 +784,10 @@ class Cassandra
   ##
   # Iterate through each row in the given column family
   #
-  # This method just calls Cassandra#get_range and yields the key and
+  # This method just calls CCassandra#get_range and yields the key and
   # columns.
   #
-  # See Cassandra#get_range for options.
+  # See CCassandra#get_range for options.
   #
   def each(column_family, options = {})
     get_range_batch(column_family, options) do |key, columns|
@@ -804,7 +804,7 @@ class Cassandra
   # the individual commands.
   #
   def batch(options = {})
-    @batch = Cassandra::Batch.new(self, options)
+    @batch = CCassandra::Batch.new(self, options)
 
     _, _, _, options =
       extract_and_validate_params(schema.cf_defs.first.name, "", [options], WRITE_DEFAULTS)
@@ -841,14 +841,14 @@ class Cassandra
   # * validation_class
   #
   def create_index(keyspace, column_family, column_name, validation_class)
-    return false if Cassandra.VERSION.to_f < 0.7
+    return false if CCassandra.VERSION.to_f < 0.7
 
     cf_def = client.describe_keyspace(keyspace).cf_defs.find{|x| x.name == column_family}
     if !cf_def.nil? and !cf_def.column_metadata.find{|x| x.name == column_name}
-      c_def  = CassandraThrift::ColumnDef.new do |cd|
+      c_def  = CCassandraThrift::ColumnDef.new do |cd|
         cd.name             = column_name
         cd.validation_class = "org.apache.cassandra.db.marshal."+validation_class
-        cd.index_type       = CassandraThrift::IndexType::KEYS
+        cd.index_type       = CCassandraThrift::IndexType::KEYS
       end
       cf_def.column_metadata.push(c_def)
       update_column_family(cf_def)
@@ -863,7 +863,7 @@ class Cassandra
   # * column_name
   #
   def drop_index(keyspace, column_family, column_name)
-    return false if Cassandra.VERSION.to_f < 0.7
+    return false if CCassandra.VERSION.to_f < 0.7
 
     cf_def = client.describe_keyspace(keyspace).cf_defs.find{|x| x.name == column_family}
     if !cf_def.nil? and cf_def.column_metadata.find{|x| x.name == column_name}
@@ -874,46 +874,46 @@ class Cassandra
 
   ##
   # This method is mostly used internally by get_index_slices to create
-  # a CassandraThrift::IndexExpression for the given options.
+  # a CCassandraThrift::IndexExpression for the given options.
   #
   # * column_name - Column to be compared
   # * value       - Value to compare against
   # * comparison  - Type of comparison to do.
   #
   def create_index_expression(column_name, value, comparison)
-    return false if Cassandra.VERSION.to_f < 0.7
+    return false if CCassandra.VERSION.to_f < 0.7
 
-    CassandraThrift::IndexExpression.new(
+    CCassandraThrift::IndexExpression.new(
       :column_name => column_name,
       :value => value,
       :op => (case comparison
                 when nil, "EQ", "eq", "=="
-                  CassandraThrift::IndexOperator::EQ
+                  CCassandraThrift::IndexOperator::EQ
                 when "GTE", "gte", ">="
-                  CassandraThrift::IndexOperator::GTE
+                  CCassandraThrift::IndexOperator::GTE
                 when "GT", "gt", ">"
-                  CassandraThrift::IndexOperator::GT
+                  CCassandraThrift::IndexOperator::GT
                 when "LTE", "lte", "<="
-                  CassandraThrift::IndexOperator::LTE
+                  CCassandraThrift::IndexOperator::LTE
                 when "LT", "lt", "<"
-                  CassandraThrift::IndexOperator::LT
+                  CCassandraThrift::IndexOperator::LT
               end ))
   end
   alias :create_idx_expr :create_index_expression
 
   ##
-  # This method takes an array if CassandraThrift::IndexExpression
-  # objects and creates a CassandraThrift::IndexClause for use in the
-  # Cassandra#get_index_slices
+  # This method takes an array if CCassandraThrift::IndexExpression
+  # objects and creates a CCassandraThrift::IndexClause for use in the
+  # CCassandra#get_index_slices
   #
-  # * index_expressions - Array of CassandraThrift::IndexExpressions.
+  # * index_expressions - Array of CCassandraThrift::IndexExpressions.
   # * start             - The starting row key.
   # * count             - The count of items to be returned
   #
   def create_index_clause(index_expressions, start = "", count = 100)
-    return false if Cassandra.VERSION.to_f < 0.7
+    return false if CCassandra.VERSION.to_f < 0.7
 
-    CassandraThrift::IndexClause.new(
+    CCassandraThrift::IndexClause.new(
       :start_key    => start,
       :expressions  => index_expressions,
       :count        => count)
@@ -925,22 +925,22 @@ class Cassandra
   # provided search parameters.
   #
   # Please note that you can either specify a
-  # CassandraThrift::IndexClause or an array of hashes with the
+  # CCassandraThrift::IndexClause or an array of hashes with the
   # format as below.
   #
   # * column_family     - The Column Family this operation will be run on.
-  # * index_clause      - This can either be a CassandraThrift::IndexClause or an array of hashes with the following keys:
+  # * index_clause      - This can either be a CCassandraThrift::IndexClause or an array of hashes with the following keys:
   #   * :column_name - Column to be compared
   #   * :value       - Value to compare against
   #   * :comparison  - Type of comparison to do.
   # * options
-  #   * :key_count    - Set maximum number of rows to return. (Only works if CassandraThrift::IndexClause is not passed in.)
-  #   * :start_key    - Set starting row key for search. (Only works if CassandraThrift::IndexClause is not passed in.)
+  #   * :key_count    - Set maximum number of rows to return. (Only works if CCassandraThrift::IndexClause is not passed in.)
+  #   * :start_key    - Set starting row key for search. (Only works if CCassandraThrift::IndexClause is not passed in.)
   #   * :consistency
   #
   # TODO: Supercolumn support.
   def get_indexed_slices(column_family, index_clause, *columns_and_options)
-    return false if Cassandra.VERSION.to_f < 0.7
+    return false if CCassandra.VERSION.to_f < 0.7
 
     column_family, columns, _, options =
       extract_and_validate_params(column_family, [], columns_and_options,
@@ -948,7 +948,7 @@ class Cassandra
 
     start_key = options[:start_key] || options[:key_start] || ""
 
-    if index_clause.class != CassandraThrift::IndexClause
+    if index_clause.class != CCassandraThrift::IndexClause
       index_expressions = index_clause.collect do |expression|
         create_index_expression(expression[:column_name], expression[:value], expression[:comparison])
       end
@@ -1003,10 +1003,10 @@ class Cassandra
   end
 
   ##
-  # Creates a new client as specified by Cassandra.thrift_client_options[:thrift_client_class]
+  # Creates a new client as specified by CCassandra.thrift_client_options[:thrift_client_class]
   #
   def new_client
-    thrift_client_class.new(CassandraThrift::Cassandra::Client, @servers, @thrift_client_options)
+    thrift_client_class.new(CCassandraThrift::CCassandra::Client, @servers, @thrift_client_options)
   end
 
   def client

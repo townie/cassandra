@@ -2,7 +2,7 @@ require 'fileutils'
 require 'rake/testtask'
 require 'rake/extensiontask'
 
-CassandraBinaries = {
+CCassandraBinaries = {
   '0.6' => 'http://archive.apache.org/dist/cassandra/0.6.13/apache-cassandra-0.6.13-bin.tar.gz',
   '0.7' => 'http://archive.apache.org/dist/cassandra/0.7.9/apache-cassandra-0.7.9-bin.tar.gz',
   '0.8' => 'http://archive.apache.org/dist/cassandra/0.8.7/apache-cassandra-0.8.7-bin.tar.gz',
@@ -21,7 +21,7 @@ def setup_cassandra_version(version = CASSANDRA_VERSION)
   destination_directory = File.join(CASSANDRA_HOME, 'cassandra-' + CASSANDRA_VERSION)
 
   unless File.exists?(File.join(destination_directory, 'bin','cassandra'))
-    download_source       = CassandraBinaries[CASSANDRA_VERSION]
+    download_source       = CCassandraBinaries[CASSANDRA_VERSION]
     download_destination  = File.join("/tmp", File.basename(download_source))
     untar_directory       = File.join(CASSANDRA_HOME,  File.basename(download_source,'-bin.tar.gz'))
 
@@ -72,7 +72,7 @@ rescue Errno::ECONNREFUSED => e
 end
 
 namespace :cassandra do
-  desc "Start Cassandra"
+  desc "Start CCassandra"
   task :start, [:daemonize] => :java do |t, args|
     args.with_defaults(:daemonize => true)
 
@@ -99,7 +99,7 @@ namespace :cassandra do
     end
   end
 
-  desc "Stop Cassandra"
+  desc "Stop CCassandra"
   task :stop => :java do
     setup_cassandra_version
     env = setup_environment
@@ -107,7 +107,7 @@ namespace :cassandra do
   end
 end
 
-desc "Start Cassandra"
+desc "Start CCassandra"
 task :cassandra => :java do
   begin
     Rake::Task["cassandra:start"].invoke(false)
@@ -116,7 +116,7 @@ task :cassandra => :java do
   end
 end
 
-desc "Run the Cassandra CLI"
+desc "Run the CCassandra CLI"
 task :cli do
   Dir.chdir(File.join(CASSANDRA_HOME, "cassandra-#{CASSANDRA_VERSION}")) do
     sh("bin/cassandra-cli -host localhost -port 9160")
@@ -162,7 +162,7 @@ end
 
 task :test => 'data:load'
 
-# desc "Regenerate thrift bindings for Cassandra" # Dev only
+# desc "Regenerate thrift bindings for CCassandra" # Dev only
 task :thrift do
   puts "Generating Thrift bindings"
   FileUtils.mkdir_p "vendor/#{CASSANDRA_VERSION}"

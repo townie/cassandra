@@ -1,3 +1,3 @@
-class Cassandra
-  class ColumnFamily < CassandraThrift::CfDef ; end
+class CCassandra
+  class ColumnFamily < CCassandraThrift::CfDef ; end
 end
